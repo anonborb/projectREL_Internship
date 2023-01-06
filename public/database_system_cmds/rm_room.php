@@ -1,0 +1,1 @@
+removes a room from the database

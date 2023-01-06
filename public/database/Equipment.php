@@ -1,13 +1,21 @@
 
 <?php
-# Defines an Equipment object
+// Defines an Equipment object
 
 class Equipment {
-	# Components of an Equipment
-	private $eq_label;
-	private $num_of_users;
-	private $storage_space;
+	/* Components of an Equipment:
+		eq_label	- unique identifier
+		num_of_users
+		storage space
+	*/
+
+	
+
+	
+	// Constructor
+	public function __construct(private string $eq_label, private int $num_of_users, private int $storage_space) {
+		
+	}  
 
 	
 }
-?>
