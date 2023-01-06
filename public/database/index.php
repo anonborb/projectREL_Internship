@@ -1,4 +1,4 @@
-<h2>show all</h2>
+<h2>Database</h2>
 <ul>
 <?php
 foreach (glob("*.php") as $filename) {
