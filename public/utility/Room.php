@@ -9,13 +9,12 @@ define("MAX_SPACE", 1000);
 class Room {
 	/* Components of a Room Object */
 	private int $curr_capacity;
-	private Equipment $equipment_arr;
+	private array $equipment_arr;
 		
 	/**
 	 * Constructor for a Room object.
 	 * @param  string $room_label Unique identifier for each Room.
 	 * @param  int $max_capacity Maximum capacity a Room may hold.
-	 * @return Room
 	 */
 	public function __construct(private string $room_label , private int $max_capacity) {
 		$this->curr_capacity = $max_capacity;

@@ -1,17 +1,21 @@
 <?php
 
-class Storage {
+require 'utility/Room.php';
+require 'utility/Equipment.php';
+
+class DataHandler {
     
-    private Equipment $equip_list;
-    private Room $room_list;
+
+    private array $room_list;
+    private array $equip_list;
     
     /**
      * Constructor for the storage.
      * Initializes two arrays containing all equipment and all rooms 
      */
     public function __construct() {
-        $this->equip_list = [];
         $this->room_list = ['warehouse' => new Room('warehouse', MAX_SPACE)];
+        $this->equip_list = [];
     }
 
 
@@ -35,6 +39,10 @@ class Storage {
         return false;
     }
 
+    public function get_equipment(string $equip_id) : Equipment|null {
+        return null;
+    }
+
 
     
     /**
@@ -55,8 +63,23 @@ class Storage {
         return false;
     }
 
+    public function get_room(string $room_id) : Room|null {
+        return null;
+    }
+
+
 
     
+    /**
+     * Prints the entire database
+     * @return void
+     */
+    public function get_status() : void {
+        echo 'hi';
+    }
+
+
+
 
 
     

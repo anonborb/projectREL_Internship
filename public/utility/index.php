@@ -1,4 +1,4 @@
-<h2>Objects</h2>
+<h2>Utility classes</h2>
 <ul>
 <?php
 foreach (glob("*.php") as $filename) {
