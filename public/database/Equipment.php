@@ -5,6 +5,8 @@
 //=====================================
 
 class Equipment {
+
+	private string $location;
 	
 	/**
 	 * Constructor for an Equipment object.
@@ -13,7 +15,9 @@ class Equipment {
 	 * @param int $storage space How much space this piece of equipment takes up.
 	 * @return Equipment
 	 */
-	public function __construct(private string $eq_label, private int $num_of_users, private int $storage_space) {}  
+	public function __construct(private string $eq_label, private int $num_of_users, private int $storage_space) {
+		$this->location = 'warehouse';
+	}  
 
 
 	/* Getters */	

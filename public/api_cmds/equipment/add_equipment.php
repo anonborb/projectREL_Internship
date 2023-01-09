@@ -1,1 +1,0 @@
-Adding equipment to the database, will be catalogued into warehouse
