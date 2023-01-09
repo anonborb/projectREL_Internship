@@ -1,11 +1,16 @@
 <?php
+//=================================
+// Class Definition of DataHandler
+//=================================
+
 
 require 'utility/Room.php';
 require 'utility/Equipment.php';
 
+define ('WAREHOUSE', 'warehouse');
+
 class DataHandler {
     
-
     private array $room_list;
     private array $equip_list;
     
@@ -14,7 +19,7 @@ class DataHandler {
      * Initializes two arrays containing all equipment and all rooms 
      */
     public function __construct() {
-        $this->room_list = ['warehouse' => new Room('warehouse', MAX_SPACE)];
+        $this->room_list = [WAREHOUSE => new Room(WAREHOUSE, MAX_SPACE)];
         $this->equip_list = [];
     }
 
@@ -22,12 +27,13 @@ class DataHandler {
     
     
     /**
-     * Adds an equipment to the equipment array. Returns false if cannot be added.
+     * Adds an equipment to the equipment array. Will allow for overwritting if equipment shares an equipment_id;
      * @param  Equipment $equip to be added
-     * @return bool
+     * @return void
      */
-    public function add_equipment(Equipment $equip) : bool {
-        return false;
+    public function add_equipment(Equipment $new_equip) : void {
+        $this->equip_list[$new_equip->get_label()] = $new_equip;
+        $this->room_list[WAREHOUSE]->add_equipment($new_equip);
     }
         
     /**

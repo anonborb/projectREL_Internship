@@ -2,7 +2,7 @@
     require 'data/DataHandler.php';
 
     session_start();
-
+    /*
     class A{
         public function __construct(public int $h)
         {
@@ -18,7 +18,7 @@
             echo $this->h;
         }
 
-    }
+    }*/
 ?>
 
 <h2>Public</h2>
@@ -34,30 +34,17 @@ foreach (glob("*.php") as $filename) {
 ?>
 
 <?php
-
+    /*
     if(!isset($_SESSION['data'])){
     $_SESSION['data']=[
         new A(1),
         new A(76)
     ];
-    }
-
-    if(!isset($_SESSION['boo'])) {
-        $_SESSION['boo'] = [
-            new Equipment("testing1", 20, 40)
-        ];
-    }
-
-    if(!isset($_SESSION['foo'])) {
-        $_SESSION['foo'] = [
-            new Room("testing2", 30)
-        ];
-    }
+    }*/
 
 
-
-    if(!isset($_SESSION['mmm'])) {
-        $_SESSION['mmm'] = [
+    if(!isset($_SESSION['test0'])) {
+        $_SESSION['test0'] = [
             new DataHandler()
         ];
     }

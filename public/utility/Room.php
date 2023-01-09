@@ -9,7 +9,7 @@ define("MAX_SPACE", 1000);
 class Room {
 	/* Components of a Room Object */
 	private int $curr_capacity;
-	private array $equipment_arr;
+	private array $equip_arr;
 		
 	/**
 	 * Constructor for a Room object.
@@ -18,7 +18,7 @@ class Room {
 	 */
 	public function __construct(private string $room_label , private int $max_capacity) {
 		$this->curr_capacity = $max_capacity;
-		$this->equipment_arr = [];
+		$this->equip_arr = [];
 
 	}
 
@@ -107,10 +107,10 @@ class Room {
 
 	/**
 	 * Adds equipment to eqipment array.
-	 * @param  string $eq_label
-	 * @return bool
+	 * @param  Equipment $new_equipment
+	 * @return void
 	 */
-	public function add_equipment(string $eq_label) : bool {
+	public function add_equipment(Equipment $new_equip) {
 		return false;
 	}
 	
