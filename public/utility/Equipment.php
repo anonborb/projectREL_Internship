@@ -5,15 +5,18 @@
 //=====================================
 
 class Equipment {
+
+	private string $location;
 	
 	/**
-	 * Constructor for an Equipment object.
+	 * Constructor for an Equipment object. Will initilize location to warehouse
 	 * @param string $eq_label Unique identifier for each equipment.
 	 * @param int $num_of_users	Number of users required to operation the machine.
 	 * @param int $storage space How much space this piece of equipment takes up.
-	 * @return Equipment
 	 */
-	public function __construct(private string $eq_label, private int $num_of_users, private int $storage_space) {}  
+	public function __construct(private string $eq_label, private int $num_of_users, private int $storage_space) {
+		$this->location = 'warehouse';
+	}  
 
 
 	/* Getters */	
@@ -22,7 +25,7 @@ class Equipment {
 	 * Returns equipment label.
 	 * @return string
 	 */
-	public function get_eq_label(): string {
+	public function get_label(): string {
 		return $this->eq_label;
 	}
 		
@@ -30,7 +33,7 @@ class Equipment {
 	 * Returns number of users.
 	 * @return int
 	 */
-	public function get_num_of_users(): int {
+	public function get_user_num(): int {
 		return $this->num_of_users;
 	}
 
@@ -38,7 +41,7 @@ class Equipment {
 	 * Returns storage space.
 	 * @return int
 	 */
-	public function get_storage_space(): int {
+	public function get_storage(): int {
 		return $this->storage_space;
 	}
 
@@ -50,7 +53,7 @@ class Equipment {
 	 * @param string $new_label
 	 * @return void
 	 */
-	public function set_eq_label(string $new_label): void {
+	public function set_label(string $new_label): void {
 		$this->eq_label = $new_label;
 	}
 	
@@ -59,7 +62,7 @@ class Equipment {
 	 * @param  int $num_of_users
 	 * @return void
 	 */
-	public function set_num_of_users(int $num_of_users): void {
+	public function set_user_num(int $num_of_users): void {
 		$this->num_of_users = $num_of_users;
 	}
 	
@@ -68,7 +71,7 @@ class Equipment {
 	 * @param  int $storage_space
 	 * @return void
 	 */
-	public function set_storage_space(int $storage_space): void {
+	public function set_storage(int $storage_space): void {
 		$this->storage_space = $storage_space;
 	}
 

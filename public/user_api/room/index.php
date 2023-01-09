@@ -2,7 +2,7 @@
 <ul>
 <?php
 foreach (glob("*.php") as $filename) {
-    echo "<li><a href='room_cmds/{$filename}'>{$filename}</a></li>";
+    echo "<li><a href='room/{$filename}'>{$filename}</a></li>";
 }
 ?>
 </ul>
