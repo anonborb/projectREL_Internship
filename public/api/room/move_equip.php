@@ -1,2 +1,2 @@
-move an equipment to a room, returns false if equipment cannot be added
+move an equipment between rooms
 will make designated changes to room object and capacity
