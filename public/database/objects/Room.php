@@ -4,6 +4,8 @@
 // Class definition for Room objects
 //=====================================
 
+define("MAX_SPACE", 1000);
+
 class Room {
 	/* Components of a Room Object */
 	private int $curr_capacity;
