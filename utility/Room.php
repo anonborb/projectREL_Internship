@@ -4,7 +4,6 @@
 // Class definition for Room objects
 //=====================================
 
-define("MAX_SPACE", 1000);
 
 class Room {
 	/* Components of a Room Object */
@@ -30,7 +29,7 @@ class Room {
 	 * Returns Room label.
 	 * @return string
 	 */
-	public function get_room_label(): string {
+	public function get_label(): string {
 		return $this->room_label;
 	}
 	
@@ -123,15 +122,16 @@ class Room {
 		return false;
 	}
 
-
-
-
-	/* possible necessary helper function 
-	private function count_curr_capacity() {
-		// add up sum of capacity of all objects in equipment array
-		// subtract sum from max_capacity to get curr
-	}*/
-
+	public function list_equipment() {
+		if (!isset($this->equip_arr)) {
+			echo "No equipment<br>";
+		} else {
+			foreach ($this->equip_arr as $equip_id => $equip) {
+				echo "id=", $equip_id, ", users=", $equip->get_user_num(), ", storage size=", $equip->get_storage(), "<br>";
+			}
+		}
+		
+	}
 
 }	
 
