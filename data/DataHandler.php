@@ -3,9 +3,8 @@
 // Class Definition of DataHandler
 //==================================
 
-
-require '../utility/Room.php';
-require '../utility/Equipment.php';
+require __DIR__.'/../utility/Equipment.php';
+require __DIR__.'/../utility/Room.php';
 
 define ('WAREHOUSE', 'warehouse');
 define("MAX_SPACE", 1000);
@@ -27,7 +26,7 @@ class DataHandler {
 
 
     
-    
+    /************** Equipment ****************/
     /**
      * Adds an equipment to the equipment array. Will allow for overwritting if equipment shares an equipment_id;
      * @param  Equipment $equip to be added
@@ -56,9 +55,27 @@ class DataHandler {
     public function get_equipment(string $equip_id) : Equipment|null {
         return $this->equip_list[$equip_id];
     }
-
-
     
+    /**
+     * Returns total number of Equipment in the database.
+     * @return int
+     */
+    public function get_total_equipment() : int {
+        return count($this->equip_list);
+    }
+    
+    /**
+     * Moves equipment between rooms.
+     * @param  mixed $equip_id
+     * @param  mixed $room_id
+     * @return void
+     */
+    public function move_equip(string $equip_id, string $room_id) {
+
+    }
+
+
+    /***************** Room *******************/
     /**
      * Adds the room to the room array. Returns false if cannot be added
      * @param  Room $room to be added
@@ -87,6 +104,10 @@ class DataHandler {
         return $this->room_list[$room_id];
     }
 
+    public function get_total_rooms() {
+        return count($this->room_list);
+    }
+
 
 
     
@@ -96,10 +117,14 @@ class DataHandler {
      */
     public function get_status() : void {
         foreach ($this->room_list as $room_id => $room) {
-            echo "room_id=", $room_id, " Equipment:<br>", $room->list_equipment(),"<br><br>";
+            echo "room_id=", $room_id, ", <br>Equipment:<br>", $room->list_equipment(),"<br><br>";
         }
         
-        echo "Total number of rooms=", count($this->room_list), "<br>Total number of Equipment=", count($this->equip_list);
+        echo "Total number of rooms=", count($this->room_list), "<br>Total number of Equipment=", count($this->equip_list), '<br>';
+
+        /*foreach ($this->equip_list as $eqid => $a) {
+            echo $eqid, "<br>";
+        }*/
     }
 
 
