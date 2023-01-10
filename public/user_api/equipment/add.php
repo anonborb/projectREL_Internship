@@ -8,8 +8,9 @@ session_start();
 
 $db = $_SESSION['testhandler'][0];
 
-$equip_id = 'test_id';
-$newEquipment = new Equipment('test_id',3,4);
+$newEquipment = new Equipment('test_id',3, 4);
+$db->add_equipment($newEquipment);
+$newEquipment = new Equipment('test_id2',1, 8);
 $db->add_equipment($newEquipment);
 
 echo "<pre>";

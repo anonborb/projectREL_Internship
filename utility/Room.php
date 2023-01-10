@@ -132,16 +132,25 @@ class Room {
 		unset($this->equip_list[$eq_id]);
 		return true;
 	}
-
+	
+	/**
+	 * Prints out a list of all equipment in the room.
+	 * @return void
+	 */
 	public function list_equipment() {
 		if (!isset($this->equip_list)) {
 			echo "Room contains no equipment";
 		} else {
 			foreach ($this->equip_list as $equip_id => $equip) {
-				echo "equipid=", $equip_id, ", users=", $equip->get_user_num(), ", storage size=", $equip->get_storage(), "<br>";
+				$equip->print();
 			}
 		}
 		
+	}
+
+	public function print() {
+		echo "room_id=", $this->room_label, ", max capacity=", $this->max_capacity, " curr capacity=", $this->curr_capacity;
+        echo "<br>Equipment:<br>", $this->list_equipment(),"<br><br>";
 	}
 
 }	

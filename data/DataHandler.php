@@ -58,8 +58,6 @@ class DataHandler {
             // throw exception ig
             return false;
         }
-        
-
     }
     
     /**
@@ -133,15 +131,20 @@ class DataHandler {
     public function get_status() : void {
         echo "<pre>";
         foreach ($this->room_list as $room_id => $room) {
-            echo "room_id=", $room_id, ", max capacity=", $room->get_max_capacity(), " curr capacity=", $room->get_curr_capacity();
-            echo "<br>Equipment:<br>", $room->list_equipment(),"<br><br>";
+            $room->print();
         }
         
         echo "Total number of rooms=", count($this->room_list), "<br>Total number of Equipment=", count($this->equip_list), '<br>';
-
-        /*foreach ($this->equip_list as $eqid => $a) {
-            echo $eqid, "<br>";
-        }*/
+    }
+    
+    /**
+     * Prints out a list of all equipments in the database.
+     * @return void
+     */
+    public function list_all_equipment() : void {
+        foreach ($this->equip_list as $equipid => $equip) {
+            $equip->print();
+        }
     }
 
 

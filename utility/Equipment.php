@@ -20,7 +20,6 @@ class Equipment {
 
 
 	/* Getters */	
-
 	/**
 	 * Returns equipment label.
 	 * @return string
@@ -83,6 +82,14 @@ class Equipment {
 		$this->storage_space = $storage_space;
 	}
 
+	
+	/**
+	 * Print function for equipment objects.
+	 * @return void
+	 */
+	public function print() {
+		echo "equipid=", $this->eq_label, ", users=", $this->num_of_users, ", storage size=", $this->storage_space, "<br>";
+	}
 
 
 
