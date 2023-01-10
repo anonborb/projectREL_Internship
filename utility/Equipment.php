@@ -44,6 +44,14 @@ class Equipment {
 	public function get_storage(): int {
 		return $this->storage_space;
 	}
+	
+	/**
+	 * Returns location of equipment.
+	 * @return string
+	 */
+	public function get_location(): string {
+		return $this->location;
+	}
 
 
 	/* Setters */

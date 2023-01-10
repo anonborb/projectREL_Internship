@@ -8,7 +8,7 @@
 class Room {
 	/* Components of a Room Object */
 	private int $curr_capacity;
-	private array $equip_arr;
+	private array $equip_list;
 		
 	/**
 	 * Constructor for a Room object.
@@ -17,14 +17,13 @@ class Room {
 	 */
 	public function __construct(private string $room_label , private int $max_capacity) {
 		$this->curr_capacity = $max_capacity;
-		$this->equip_arr = [];
+		$this->equip_list = [];
 
 	}
 
 
 
-	/* Getters for Room objects */
-
+	/* Getters */
 	/**
 	 * Returns Room label.
 	 * @return string
@@ -51,7 +50,6 @@ class Room {
 
 
 	/* Setters */ 
-
 	/**
 	 * Changes room label.
 	 * @param  string $room_label
@@ -68,12 +66,11 @@ class Room {
 	 */
 	public function set_max_capacity(int $max_capacity) : void {
 		$this->max_capacity = $max_capacity;
-		/* will need to take into account decreasing room capacity affecting curr capacity */
+		/* will need to take into account decreasing room capacity affecting curr capacity */ //how about nnnnnnah
 	}
 
 
 	/* Change rooms current capacity */
-
 	/**
 	 * Sets current capacity to num_of_people.
 	 * @param  int $num_of_people
@@ -103,31 +100,45 @@ class Room {
 
 
 	/* Changing equipment array */
-
 	/**
-	 * Adds equipment to eqipment array.
+	 * Adds equipment to eqipment array. Returns false if equipment cannot be added.
 	 * @param  Equipment $new_equipment
-	 * @return void
+	 * @return bool
 	 */
-	public function add_equipment(Equipment $new_equip) {
-		return false;
+	public function add_equipment(Equipment $new_equip) : bool {
+		$eq_id = $new_equip->get_label();
+		$eq_storage = $new_equip->get_storage();
+
+		if ($this->curr_capacity < $eq_storage || isset($this->equip_list[$eq_id])) {
+			return false;
+		}
+
+		$this->curr_capacity -= $eq_storage;
+		$this->equip_list[$eq_id] = $new_equip;
+		return true;
 	}
 	
 	/**
-	 * Removes equipment from equipment array.
-	 * @param  string $eq_label
+	 * Removes equipment from equipment array. Returns false if equipment was not found.
+	 * @param  Equipment $equip
 	 * @return bool
 	 */
-	public function rm_equipment(string $eq_label) : bool {
-		return false;
+	public function rm_equipment(Equipment $equip) : bool {
+		$eq_id = $equip->get_label();
+		if (!isset($this->equip_list[$eq_id])) {	// Check if equipment is in the room
+			return false;
+		}
+		$this->curr_capacity += $equip->get_storage();	// Expand room's current capacity
+		unset($this->equip_list[$eq_id]);
+		return true;
 	}
 
 	public function list_equipment() {
-		if (!isset($this->equip_arr)) {
-			echo "No equipment<br>";
+		if (!isset($this->equip_list)) {
+			echo "Room contains no equipment";
 		} else {
-			foreach ($this->equip_arr as $equip_id => $equip) {
-				echo "id=", $equip_id, ", users=", $equip->get_user_num(), ", storage size=", $equip->get_storage(), "<br>";
+			foreach ($this->equip_list as $equip_id => $equip) {
+				echo "equipid=", $equip_id, ", users=", $equip->get_user_num(), ", storage size=", $equip->get_storage(), "<br>";
 			}
 		}
 		

@@ -30,12 +30,14 @@ class DataHandler {
     /**
      * Adds an equipment to the equipment array. Will allow for overwritting if equipment shares an equipment_id;
      * @param  Equipment $equip to be added
-     * @return void
+     * @return bool
      */
-    public function add_equipment(Equipment $new_equip) : void {
+    public function add_equipment(Equipment $new_equip) : bool {
+        if (!$this->room_list[WAREHOUSE]->add_equipment($new_equip)) {
+            return false;
+        }
         $this->equip_list[$new_equip->get_label()] = $new_equip;
-        $this->room_list[WAREHOUSE]->add_equipment($new_equip);
-
+        return true;
     }
         
     /**
@@ -43,8 +45,21 @@ class DataHandler {
      * @param  string $equip_id
      * @return bool
      */
-    public function rm_equipment(string $equip_id) : bool{
-        return false;
+    public function rm_equipment(string $equip_id) : bool {
+        $equip = $this->equip_list[$equip_id];
+        if (isset($this->equip_list[$equip_id])) {
+
+            $rm_location = $this->get_equipment($equip_id)->get_location(); // removing from its current location
+            $this->room_list[$rm_location]->rm_equipment($equip);
+            
+            unset($this->equip_list[$equip_id]);    // removing from the database
+            return true;
+        } else {
+            // throw exception ig
+            return false;
+        }
+        
+
     }
     
     /**
@@ -116,8 +131,10 @@ class DataHandler {
      * @return void
      */
     public function get_status() : void {
+        echo "<pre>";
         foreach ($this->room_list as $room_id => $room) {
-            echo "room_id=", $room_id, ", <br>Equipment:<br>", $room->list_equipment(),"<br><br>";
+            echo "room_id=", $room_id, ", max capacity=", $room->get_max_capacity(), " curr capacity=", $room->get_curr_capacity();
+            echo "<br>Equipment:<br>", $room->list_equipment(),"<br><br>";
         }
         
         echo "Total number of rooms=", count($this->room_list), "<br>Total number of Equipment=", count($this->equip_list), '<br>';
@@ -126,15 +143,6 @@ class DataHandler {
             echo $eqid, "<br>";
         }*/
     }
-
-
-
-
-
-    
-
-
-
 
 
 
