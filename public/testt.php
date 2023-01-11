@@ -1,9 +1,16 @@
-<?php require 'data/DataHandler.php';
+<?php require '../data/DataHandler.php';
     session_start();
     
-    $_SESSION['test0'][0]->get_status();
-    $_SESSION['eq_test'] = [
-        new Equipment("fakeid", 2, 10)
-    ];
+    $datahandler = $_SESSION['testhandler'][0];
 
-    $_SESSION['test0'][0]->add_equipment($_SESSION['eq_test'][0]);
+
+    $datahandler->add_equipment(new Equipment('fakeid', 2, 10));
+    $datahandler->add_equipment(new Equipment('fakeid2', 1, 5));
+
+    if (!$datahandler->rm_equipment("fake_id")) {
+        echo "<pre>fake_id does not exist";
+    }
+    $datahandler->get_status();
+
+    $datahandler->rm_equipment("fakeid");
+    $datahandler->get_status();
