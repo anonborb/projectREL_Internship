@@ -6,8 +6,10 @@
 require __DIR__.'/../utility/Equipment.php';
 require __DIR__.'/../utility/Room.php';
 
-define ('WAREHOUSE', 'warehouse');
-define("MAX_SPACE", 1000);
+if (!defined("NONE")) { define ("NONE", ""); }
+define ("MAX_SPACE", 1000);
+define ("WAREHOUSE", "warehouse");
+
 
 class DataHandler {
     
@@ -28,34 +30,57 @@ class DataHandler {
     
     /************** Equipment ****************/
     /**
-     * Adds an equipment to the equipment array. Will allow for overwritting if equipment shares an equipment_id;
+     * Adds an equipment to the database. Returns false if equipment already exists.
+     * If overwrite flag is 1, the old equipment will be overwritten.
      * @param  Equipment $equip to be added
+     * @param  string $room Optional room location. 
+     * @param  int $overwrite Default 0, will not overwrite.
      * @return bool
      */
-    public function add_equipment(Equipment $new_equip) : bool {
-        if (!$this->room_list[WAREHOUSE]->add_equipment($new_equip)) {
+    public function add_equipment(Equipment $new_equip, String $room = NONE, int $overwrite = 0) : bool {
+        if (!isset($new_equip)) {
+            throw new InvalidArgumentException("DataHandler:add_equipment, Equipment is null");
+        }
+
+        $eq_label = $new_equip->get_label();
+        if (isset($this->equip_list[$eq_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
             return false;
         }
-        $this->equip_list[$new_equip->get_label()] = $new_equip;
+        if ($room != NONE) {
+            try {
+                $this->room_list[$room]->add_equipment($new_equip);
+            } catch (Exception $e) {
+                echo $e->getMessage(), "<br>Equipment was not added to room<br>";
+            }
+            $new_equip->set_location($room);
+        }
+        $this->equip_list[$eq_label] = $new_equip;
         return true;
     }
         
     /**
      * Removes specified equipment from the database. Will remove from current room location.
+     * Returns false if Equipment does not exist in the database.
      * @param  string $equip_id
      * @return bool
      */
     public function rm_equipment(string $equip_id) : bool {
         $equip = $this->equip_list[$equip_id];
-        if (isset($this->equip_list[$equip_id])) {
 
-            $rm_location = $this->get_equipment($equip_id)->get_location(); // removing from its current location
-            $this->room_list[$rm_location]->rm_equipment($equip);
+        if (isset($equip)) {
+            $rm_location = $equip->get_location();
+            if ($rm_location != NONE) {     // Removing from current room location
+                try {
+                    $this->room_list[$rm_location]->rm_equipment($equip);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                    echo "<br>Room does not exist.";
+                }
+            }
             
             unset($this->equip_list[$equip_id]);    // removing from the database
             return true;
         } else {
-            // throw exception ig
             return false;
         }
     }
@@ -83,7 +108,7 @@ class DataHandler {
      * @param  mixed $room_id
      * @return void
      */
-    public function move_equip(string $equip_id, string $room_id) {
+    public function move_equip(string $equip_id, string $room_id) {     // yet to be implemented
 
     }
 
@@ -95,7 +120,7 @@ class DataHandler {
      * @return void
      */
     public function add_room(Room $room) : void {
-        $this->room_list[$room->get_label()] = $room;
+        
     
     }
     
@@ -104,7 +129,7 @@ class DataHandler {
      * @param  mixed $room_id
      * @return bool
      */
-    public function rm_room(string $room_id) : bool {
+    public function rm_room(string $room_id) : bool { //yet to be implemented haha oops
         return false;
     }
     
@@ -123,7 +148,7 @@ class DataHandler {
 
 
 
-    
+    /************** Printing data *****************/
     /**
      * Prints the entire database
      * @return void

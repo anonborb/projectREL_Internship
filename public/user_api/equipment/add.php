@@ -9,9 +9,9 @@ session_start();
 $db = $_SESSION['testhandler'][0];
 
 $newEquipment = new Equipment('test_id',3, 4);
-$db->add_equipment($newEquipment);
+$db->add_equipment($newEquipment, WAREHOUSE);
 $newEquipment = new Equipment('test_id2',1, 8);
-$db->add_equipment($newEquipment);
+$db->add_equipment($newEquipment, WAREHOUSE);
 
 echo "<pre>";
 $db->get_status();

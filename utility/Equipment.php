@@ -4,9 +4,9 @@
 // Defines an Equipment object
 //=====================================
 
-class Equipment {
+define ('NONE', "");
 
-	private string $location;
+class Equipment {
 	
 	/**
 	 * Constructor for an Equipment object. Will initilize location to warehouse
@@ -14,8 +14,8 @@ class Equipment {
 	 * @param int $num_of_users	Number of users required to operation the machine.
 	 * @param int $storage space How much space this piece of equipment takes up.
 	 */
-	public function __construct(private string $eq_label, private int $num_of_users, private int $storage_space) {
-		$this->location = 'warehouse';
+	public function __construct(private string $eq_label, private int $num_of_users, private int $storage_space, private string $location = NONE) {
+		
 	}  
 
 
@@ -56,7 +56,7 @@ class Equipment {
 	/* Setters */
 
 	/**
-	 * Changes equipment label.
+	 * Sets equipment label.
 	 * @param string $new_label
 	 * @return void
 	 */
@@ -65,7 +65,7 @@ class Equipment {
 	}
 	
 	/**
-	 * Changes number of required users.
+	 * Sets number of required users.
 	 * @param  int $num_of_users
 	 * @return void
 	 */
@@ -74,12 +74,21 @@ class Equipment {
 	}
 	
 	/**
-	 * Changes required storage space.
+	 * Sets required storage space.
 	 * @param  int $storage_space
 	 * @return void
 	 */
 	public function set_storage(int $storage_space): void {
 		$this->storage_space = $storage_space;
+	}
+	
+	/**
+	 * Sets location of equipment to room label
+	 * @param  mixed $room
+	 * @return void
+	 */
+	public function set_location(string $room) {
+		$this->location = $room;
 	}
 
 	
@@ -88,6 +97,7 @@ class Equipment {
 	 * @return void
 	 */
 	public function print() {
+		echo "<pre>";
 		echo "equipid=", $this->eq_label, ", users=", $this->num_of_users, ", storage size=", $this->storage_space, "<br>";
 	}
 
