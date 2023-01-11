@@ -12,7 +12,7 @@ $room = $db->get_room($room_id);
 if (!$room) {
     echo "<pre>Room ", $room_id, " does not exist in database.<br>";
 } else {
-    $room->add_people(15);
+    $room->rm_people(15);
 }
 
 $db->get_status();

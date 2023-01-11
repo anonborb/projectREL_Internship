@@ -8,22 +8,20 @@
 class Room {
 	/* Components of a Room Object */
 	private int $curr_capacity, $curr_occupants;
-	private array $equip_list;
 		
 	/**
 	 * Constructor for a Room object.
 	 * @param  string $room_label Unique identifier for each Room.
 	 * @param  int $max_capacity Maximum capacity a Room may hold.
 	 */
-	public function __construct(private string $room_label , private int $max_capacity) {
+	public function __construct(private string $room_label , private int $max_capacity, private array $equip_list = []) {
 		$this->curr_capacity = $max_capacity;
-		$this->equip_list = [];
 		$this->curr_occupants = 0;
 	}
 
 
 
-	/* Getters */
+	/**********  Getters **********/
 	/**
 	 * Returns Room label.
 	 * @return string
@@ -59,28 +57,18 @@ class Room {
 
 
 
-	/* Change rooms current capacity */
-	/**
-	 * Sets current capacity to num_of_people. Returns false if number of people exceeds current room capacity.
-	 * @param  int $num_of_people
-	 * @return bool
-	 */
-	public function set_occupants(int $num_of_people) : bool {
-		$empty_space = $this->max_capacity - $this->curr_capacity;
-		if ($empty_space >= $num_of_people) {
-			$this->curr_capacity -= $num_of_people;
-			$this->curr_occupants = $num_of_people;
-			return true;
-		}
-		return false;
-	}
-
+	/******** Altering current capacity **********/
 	/**
 	 * Adds users to current capacity. Unimplemented.
 	 * @param  int $num_of_people
 	 * @return bool
 	 */
 	public function add_people(int $num_of_people) : bool {
+		if ($this->curr_capacity >= $num_of_people) {
+			$this->curr_capacity -= $num_of_people;
+			$this->curr_occupants += $num_of_people;
+			return true;
+		}
 		return false;
 	}
 	
@@ -90,11 +78,18 @@ class Room {
 	 * @return bool
 	 */
 	public function rm_people(int $num_of_people) : bool {
+		if ($num_of_people <= $this->curr_occupants) {
+			$this->curr_capacity += $num_of_people;
+			$this->curr_occupants -= $num_of_people;
+			return true;
+		}
 		return false;
 	}
 
 
-	/* Changing equipment array */
+
+
+	/********** Altering equipment array ***********/
 	/**
 	 * Adds equipment to eqipment array. Returns false if equipment already exists.
 	 * @param  Equipment $new_equipment
@@ -106,17 +101,17 @@ class Room {
 		if (!isset($new_equip)) {
 			throw new InvalidArgumentException("Room:add_equipment, Argument is null.");
 		}
-		$eq_id = $new_equip->get_label();
+		$equip_id = $new_equip->get_label();
 		$eq_storage = $new_equip->get_storage();
 
 		if ($this->curr_capacity < $eq_storage) {
 			throw new OverflowException("Room:add_equipment, Room's capacity cannot hold new equipment.");
-		} else if (isset($this->equip_list[$eq_id])) {
+		} else if (isset($this->equip_list[$equip_id])) {
 			return false; 
 		}
 
 		$this->curr_capacity -= $eq_storage;
-		$this->equip_list[$eq_id] = $new_equip;
+		$this->equip_list[$equip_id] = $new_equip;
 		return true;
 	}
 	
@@ -131,22 +126,37 @@ class Room {
 			throw new InvalidArgumentException("Room:rm_equipment, Argument is null.");
 		}
 
-		$eq_id = $equip->get_label();
-		if (!isset($this->equip_list[$eq_id])) {	// Check if equipment is in the room
+		$equip_id = $equip->get_label();
+		if (!isset($this->equip_list[$equip_id])) {	// Check if equipment is in the room
 			return false;
 		}
 		$this->curr_capacity += $equip->get_storage();	// Expand room's current capacity
-		unset($this->equip_list[$eq_id]);
+		$equip->rm_location();			// Returns equipment to 
+		unset($this->equip_list[$equip_id]);
 		return true;
 	}
 	
+	/**
+	 * Removes all equipment in the room.
+	 * @return void
+	 */
+	public function rm_equipment_all() {
+		foreach ($this->equip_list as $equip_id => $equip) {
+			$this->rm_equipment($equip);
+		}
+	}
+
+
+
+	
+	/************* Printing Methods **************/
 	/**
 	 * Prints out a list of all equipment in the room.
 	 * @return void
 	 */
 	public function list_equipment() {
-		if (!isset($this->equip_list)) {
-			echo "Room contains no equipment";
+		if (empty($this->equip_list)) {
+			echo "Room contains no equipment<br>";
 		} else {
 			foreach ($this->equip_list as $equip_id => $equip) {
 				$equip->print();
@@ -160,8 +170,7 @@ class Room {
 	 * @return void
 	 */
 	public function print() {
-		echo "room_id=", $this->room_label, ", max capacity=", $this->max_capacity, " curr capacity=", $this->curr_capacity;
-        echo "<br>Equipment:<br>", $this->list_equipment(),"<br><br>";
+		echo "room_id=", $this->room_label, ", max capacity=", $this->max_capacity, " curr capacity=", $this->curr_capacity, "<br>";
 	}
 
 }	

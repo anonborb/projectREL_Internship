@@ -34,7 +34,7 @@ class Equipment {
 	 * Returns number of users.
 	 * @return int
 	 */
-	public function get_user_num(): int {
+	public function get_num_users(): int {
 		return $this->num_of_users;
 	}
 
@@ -92,6 +92,14 @@ class Equipment {
 	public function set_location(string $room) {
 		$this->location = $room;
 	}
+	
+	/**
+	 * Sets location of equipment to NONE, equipment will only exist in database inventory.
+	 * @return void
+	 */
+	public function rm_location() {
+		$this->location = self::NONE;
+	}	
 
 	
 	/**
@@ -99,7 +107,6 @@ class Equipment {
 	 * @return void
 	 */
 	public function print() {
-		echo "<pre>";
 		echo "equipid=", $this->eq_label, ", users=", $this->num_of_users, ", storage size=", $this->storage_space, "<br>";
 	}
 

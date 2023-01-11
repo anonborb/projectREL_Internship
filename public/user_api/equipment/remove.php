@@ -1,8 +1,5 @@
 <?php
-/**removes an equipment from the database
-unresolved: how to efficiently remove equipment from both database and rooms
-    - add additional string var in Equipment class that holds roomid of its location
-        (would make searching for Equipment easier) */
+/**removes an equipment from the database */
 
 require '../../../data/DataHandler.php';
 session_start();
