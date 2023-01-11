@@ -4,17 +4,19 @@
 // Defines an Equipment object
 //=====================================
 
-define ('NONE', "");
 
 class Equipment {
 	
+	const NONE = "";
+
+
 	/**
 	 * Constructor for an Equipment object. Will initilize location to warehouse
 	 * @param string $eq_label Unique identifier for each equipment.
 	 * @param int $num_of_users	Number of users required to operation the machine.
 	 * @param int $storage space How much space this piece of equipment takes up.
 	 */
-	public function __construct(private string $eq_label, private int $num_of_users, private int $storage_space, private string $location = NONE) {
+	public function __construct(private string $eq_label, private int $num_of_users, private int $storage_space, private string $location = self::NONE) {
 		
 	}  
 

@@ -6,24 +6,23 @@
 require __DIR__.'/../utility/Equipment.php';
 require __DIR__.'/../utility/Room.php';
 
-if (!defined("NONE")) { define ("NONE", ""); }
-define ("MAX_SPACE", 1000);
-define ("WAREHOUSE", "warehouse");
-
 
 class DataHandler {
     
+    const MAX_SPACE = 1000;
+    const WAREHOUSE = "warehouse";
+    const NONE = "";
+
     private array $room_list;
-    private array $equip_list;
+    
     
     /**
      * Constructor for the Handler.
      * Initializes two arrays containing all equipment and all rooms.
      * Automatically creates the warehouse.
      */
-    public function __construct() {
-        $this->room_list = [WAREHOUSE => new Room(WAREHOUSE, MAX_SPACE)];
-        $this->equip_list = [];
+    public function __construct(private array $equip_list = []) {
+        $this->room_list = [self::WAREHOUSE => new Room(self::WAREHOUSE, self::MAX_SPACE)];
     }
 
 
@@ -34,10 +33,10 @@ class DataHandler {
      * If overwrite flag is 1, the old equipment will be overwritten.
      * @param  Equipment $equip to be added
      * @param  string $room Optional room location. 
-     * @param  int $overwrite Default 0, will not overwrite.
+     * @param  int $overwrite Default will not allow overwriting, if set to >0 overwriting will be allowed.
      * @return bool
      */
-    public function add_equipment(Equipment $new_equip, String $room = NONE, int $overwrite = 0) : bool {
+    public function add_equipment(Equipment $new_equip, String $room = self::NONE, int $overwrite = 0) : bool {
         if (!isset($new_equip)) {
             throw new InvalidArgumentException("DataHandler:add_equipment, Equipment is null");
         }
@@ -46,7 +45,7 @@ class DataHandler {
         if (isset($this->equip_list[$eq_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
             return false;
         }
-        if ($room != NONE) {
+        if ($room != self::NONE) {
             try {
                 $this->room_list[$room]->add_equipment($new_equip);
             } catch (Exception $e) {
@@ -69,16 +68,16 @@ class DataHandler {
 
         if (isset($equip)) {
             $rm_location = $equip->get_location();
-            if ($rm_location != NONE) {     // Removing from current room location
+            if ($rm_location != self::NONE) {     // Removing from current room location
                 try {
                     $this->room_list[$rm_location]->rm_equipment($equip);
-                } catch (Exception $e) {
+                } catch (Exception $e) {    // On the off chance that Room does not exist in database 
                     echo $e->getMessage();
                     echo "<br>Room does not exist.";
                 }
             }
             
-            unset($this->equip_list[$equip_id]);    // removing from the database
+            unset($this->equip_list[$equip_id]);    // Removing from inventory
             return true;
         } else {
             return false;
