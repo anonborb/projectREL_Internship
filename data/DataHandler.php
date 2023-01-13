@@ -2,9 +2,9 @@
 //==================================
 // Class Definition of DataHandler
 //==================================
-
 require_once __DIR__.'/../utility/Equipment.php';
 require_once __DIR__.'/../utility/Room.php';
+session_start();
 
 
 class DataHandler {
@@ -13,19 +13,19 @@ class DataHandler {
     const WAREHOUSE = "warehouse";
     const NONE = "";
 
-    private array $room_list;
-    
-    
+    private array $room_list, $equip_list; 
+
     /**
      * Constructor for the Handler.
      * Initializes two arrays containing all equipment and all rooms.
      * Automatically creates the warehouse.
      */
-    public function __construct(private array $equip_list = []) {
-        $this->room_list = [self::WAREHOUSE => new Room(self::WAREHOUSE, self::MAX_SPACE)];
+    public function __construct() {
+        $_SESSION['room_list']  ?? $_SESSION['room_list'] = [self::WAREHOUSE => new Room(self::WAREHOUSE, self::MAX_SPACE)];
+        $_SESSION['equip_list'] ?? $_SESSION['equip_list'] = [];
+        $this->room_list = $_SESSION['room_list'];
+        $this->equip_list = $_SESSION['equip_list'];
     }
-
-
     
     /************** Equipment Methods ****************/
     /**
@@ -147,10 +147,7 @@ class DataHandler {
      * @return void
      */
     public function add_room(Room $room) : void {
-        if (!isset($room)) {
-            throw new InvalidArgumentException("DataHandler:add_room, Room is null");
-        }
-        $this->room_list[$room->get_label()] = $room;
+        $_SESSION['room_list'][$room->get_label()] = $room;
     }
     
     /**
@@ -184,7 +181,7 @@ class DataHandler {
      * @return array
      */
     public function get_all_rooms() : array {
-        return $this->room_list;
+        return $_SESSION['room_list'];
     }
 
     public function get_total_rooms() {

@@ -21,7 +21,7 @@ class Equipment {
 	}  
 
 
-	/* Getters */	
+	/****************** Getters *******************/	
 	/**
 	 * Returns equipment label.
 	 * @return string
@@ -55,8 +55,7 @@ class Equipment {
 	}
 
 
-	/* Setters */
-
+	/*************** Setters *****************/
 	/**
 	 * Sets equipment label.
 	 * @param string $new_label

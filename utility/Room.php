@@ -145,6 +145,14 @@ class Room {
 			$this->rm_equipment($equip);
 		}
 	}
+	
+	/**
+	 * Returns an array of all equipment in the room.
+	 * @return array
+	 */
+	public function get_equipment() : array {
+		return $this->equip_list;
+	}
 
 
 
