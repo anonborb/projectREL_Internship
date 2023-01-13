@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__.'/../../data/DataHandler.php';
 $DB = new DataHandler;
-$room = $_SESSION['curr_room'];
-$eq_list = $room->get_equipment();
+$room_id = $_GET['room_id'];
+$eq_list = $DB->get_room($room_id)->get_equipment();
 
 ?><!DOCTYPE html>
 <html>
@@ -16,7 +16,7 @@ $eq_list = $room->get_equipment();
     </head>
 <body>
 
-<h1>Room: <?php echo $room->get_label() ?></h1>
+<h1>Room: <?php echo $room_id ?></h1>
 <h2>Number of Items: <?php echo count($eq_list)?></h2>
 
 <pre>
