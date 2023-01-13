@@ -1,5 +1,5 @@
 <?php
-/** List all equipment in the database */
+/** List all equipment in warehouse */
 
 require '../../../data/DataHandler.php';
 session_start();

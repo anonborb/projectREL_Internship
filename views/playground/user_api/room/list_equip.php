@@ -1,7 +1,7 @@
 <?php
 //list all equipment held in this room
 
-require '../../../data/DataHandler.php';
+require __DIR__.'/../../../data/DataHandler.php';
 session_start();
 
 $db = $_SESSION['testhandler'][0];

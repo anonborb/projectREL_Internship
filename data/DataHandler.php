@@ -3,8 +3,8 @@
 // Class Definition of DataHandler
 //==================================
 
-require __DIR__.'/../utility/Equipment.php';
-require __DIR__.'/../utility/Room.php';
+require_once __DIR__.'/../utility/Equipment.php';
+require_once __DIR__.'/../utility/Room.php';
 
 
 class DataHandler {
@@ -94,6 +94,14 @@ class DataHandler {
     }
     
     /**
+     * Returns an array of all equipment in the database.
+     * @return array
+     */
+    public function get_all_equipment() : array {
+        return $this->equip_list;
+    }
+    
+    /**
      * Returns total number of Equipment in the database.
      * @return int
      */
@@ -117,8 +125,7 @@ class DataHandler {
 
         $old_location = $equip->get_location();
         if ($old_location != self::NONE) {  // Removes equipment from old location
-            $old_room = $this->room_list[$old_location];
-            $old_room->rm_equipment($equip);
+            $old_room = $this->room_list[$old_location]->rm_equipment($equip);
         }
 
         $new_room = $this->room_list[$new_room_id];
@@ -171,6 +178,15 @@ class DataHandler {
         return $this->room_list[$room_id];
     }
 
+    
+    /**
+     * Returns an array of all rooms in the database.
+     * @return array
+     */
+    public function get_all_rooms() : array {
+        return $this->room_list;
+    }
+
     public function get_total_rooms() {
         return count($this->room_list);
     }
@@ -187,7 +203,8 @@ class DataHandler {
         echo "<pre>";
         foreach ($this->room_list as $room_id => $room) {
             $room->print();
-            echo "Equipment:<br>", $room->list_equipment(),"<br><br>";
+            echo "Equipment:<br>", $room->list_equipment();
+            echo "___________________________________________<br>";
         }
         
         echo "Total number of rooms=", count($this->room_list), "<br>Total number of Equipment=", count($this->equip_list), '<br>';

@@ -2,7 +2,7 @@
 
 /** Adds people to a room */
 
-require '../../../data/DataHandler.php';
+require __DIR__.'/../../../data/DataHandler.php';
 session_start();
 
 $db = $_SESSION['testhandler'][0];

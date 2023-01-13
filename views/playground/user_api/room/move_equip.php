@@ -2,7 +2,7 @@
 //move an equipment between rooms
 //will make designated changes to room object and capacity
 
-require '../../../data/DataHandler.php';
+require __DIR__.'/../../../data/DataHandler.php';
 session_start();
 
 $db = $_SESSION['testhandler'][0];
