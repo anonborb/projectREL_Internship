@@ -7,6 +7,7 @@ $DB = new DataHandler;
     <head>
     </head>
     <body>
+        <h1>Add room</h1>
         <form method='POST'>
             <label for="room_id">Enter new Room-ID:</label><br>
             <input type="text" id="room_id" name="room_id"><br>

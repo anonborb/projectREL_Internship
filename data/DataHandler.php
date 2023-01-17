@@ -14,6 +14,7 @@ class DataHandler {
     const NONE = "";
 
     private array $room_list, $equip_list; 
+    private string $rooms = 'room_list';
 
     /**
      * Constructor for the Handler.
@@ -21,9 +22,8 @@ class DataHandler {
      * Automatically creates the warehouse.
      */
     public function __construct() {
-        $_SESSION['room_list']  ?? $_SESSION['room_list'] = [self::WAREHOUSE => new Room(self::WAREHOUSE, self::MAX_SPACE)];
+        $_SESSION[$this->rooms]  ?? $_SESSION[$this->rooms] = [self::WAREHOUSE => new Room(self::WAREHOUSE, self::MAX_SPACE)];
         $_SESSION['equip_list'] ?? $_SESSION['equip_list'] = [];
-        $this->room_list = $_SESSION['room_list'];
         $this->equip_list = $_SESSION['equip_list'];
     }
     
@@ -105,7 +105,7 @@ class DataHandler {
      * @return int
      */
     public function get_total_equipment() : int {
-        return count($this->equip_list);
+        return count($_SESSION['equip_list']);
     }
     
     /**
@@ -124,10 +124,10 @@ class DataHandler {
 
         $old_location = $equip->get_location();
         if ($old_location != self::NONE) {  // Removes equipment from old location
-            $old_room = $this->room_list[$old_location]->rm_equipment($equip);
+            $_SESSION[$this->rooms][$old_location]->rm_equipment($equip);
         }
 
-        $new_room = $this->room_list[$new_room_id];
+        $new_room = $_SESSION[$this->rooms][$new_room_id];
         if (!isset($new_room)) {    
             return false;       // Room does not exist
         }
@@ -148,16 +148,14 @@ class DataHandler {
      * @return bool
      */
     public function add_room(Room $room, bool $overwrite = false) : bool {
-        //$_SESSION['room_list'][$room->get_label()] = $room;
-
         if (!isset($room)) {
             throw new InvalidArgumentException("DataHandler:add_room, Room is null");
         }
         $room_label = $room->get_label();
-        if (isset($this->room_list[$room_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
+        if (isset($_SESSION[$this->rooms][$room_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
             return false;
         }
-        $this->room_list[$room_label] = $room;
+        $_SESSION[$this->rooms][$room_label] = $room;
         return true;
     }
     
@@ -168,22 +166,22 @@ class DataHandler {
      * @return bool
      */
     public function rm_room(string $room_id) : bool { 
-        $room = $this->room_list[$room_id];
+        $room = $_SESSION[$this->rooms][$room_id];
         if (!isset($room)) {
             return false;
         }
         $room->rm_equipment_all();
-        unset($this->room_list[$room_id]);
+        unset($_SESSION[$this->rooms][$room_id]);
         return true;
     }
     
     /**
-     * Retrieves the room from the room_list. Returns null if not found.
+     * Retrieves the room from the this->room_list. Returns null if not found.
      * @param  mixed $room_id
      * @return Room
      */
     public function get_room(string $room_id) : Room|null {
-        return $this->room_list[$room_id];
+        return $_SESSION[$this->rooms][$room_id];
     }
 
     
@@ -192,11 +190,11 @@ class DataHandler {
      * @return array
      */
     public function get_all_rooms() : array {
-        return $_SESSION['room_list'];
+        return $_SESSION[$this->rooms];
     }
 
     public function get_total_rooms() {
-        return count($this->room_list);
+        return count($_SESSION[$this->rooms]);
     }
 
 
@@ -209,7 +207,7 @@ class DataHandler {
      */
     public function get_status() : void {
         echo "<pre>";
-        foreach ($this->room_list as $room_id => $room) {
+        foreach ($_SESSION[$this->rooms] as $room_id => $room) {
             $room->print();
             echo "Equipment:<br>", $room->list_equipment();
             echo "___________________________________________<br>";
