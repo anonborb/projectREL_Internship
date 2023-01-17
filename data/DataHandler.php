@@ -13,8 +13,7 @@ class DataHandler {
     const WAREHOUSE = "warehouse";
     const NONE = "";
 
-    private array $room_list, $equip_list; 
-    private string $rooms = 'room_list';
+    private string $rooms = 'room_list', $equipments = 'equip_list';
 
     /**
      * Constructor for the Handler.
@@ -24,7 +23,6 @@ class DataHandler {
     public function __construct() {
         $_SESSION[$this->rooms]  ?? $_SESSION[$this->rooms] = [self::WAREHOUSE => new Room(self::WAREHOUSE, self::MAX_SPACE)];
         $_SESSION['equip_list'] ?? $_SESSION['equip_list'] = [];
-        $this->equip_list = $_SESSION['equip_list'];
     }
     
     /************** Equipment Methods ****************/
@@ -41,18 +39,18 @@ class DataHandler {
             throw new InvalidArgumentException("DataHandler:add_equipment, Equipment is null");
         }
         $eq_label = $new_equip->get_label();
-        if (isset($this->equip_list[$eq_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
+        if (isset($_SESSION[$this->equipments][$eq_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
             return false;
         }
         if ($room != self::NONE) {
             try {
-                $this->room_list[$room]->add_equipment($new_equip);
+                $_SESSION[$this->rooms][$room]->add_equipment($new_equip);
             } catch (Exception $e) {
                 echo $e->getMessage(), "<br>Equipment was not added to room<br>";
             }
             $new_equip->set_location($room);
         }
-        $this->equip_list[$eq_label] = $new_equip;
+        $_SESSION[$this->equipments][$eq_label] = $new_equip;
         return true;
     }
         
@@ -63,20 +61,20 @@ class DataHandler {
      * @return bool
      */
     public function rm_equipment(string $equip_id) : bool {
-        $equip = $this->equip_list[$equip_id];
+        $equip = $_SESSION[$this->equipments][$equip_id];
 
         if (isset($equip)) {
             $room_location = $equip->get_location();
             if ($room_location != self::NONE) {     // Removing from current room location
                 try {
-                    $this->room_list[$room_location]->rm_equipment($equip);
+                    $_SESSION[$this->rooms][$room_location]->rm_equipment($equip);
                 } catch (Exception $e) {    // On the off chance that Room does not exist in database 
                     echo $e->getMessage();
                     echo "<br>Room does not exist.";
                 }
             }
             
-            unset($this->equip_list[$equip_id]);    // Removing from inventory
+            unset($_SESSION[$this->equipments][$equip_id]);    // Removing from inventory
             return true;
         } else {
             return false;
@@ -89,7 +87,7 @@ class DataHandler {
      * @return Equipment
      */
     public function get_equipment(string $equip_id) : Equipment|null {
-        return $this->equip_list[$equip_id];
+        return $_SESSION[$this->equipments][$equip_id];
     }
     
     /**
@@ -97,7 +95,7 @@ class DataHandler {
      * @return array
      */
     public function get_all_equipment() : array {
-        return $this->equip_list;
+        return $_SESSION[$this->equipments];
     }
     
     /**
@@ -213,7 +211,7 @@ class DataHandler {
             echo "___________________________________________<br>";
         }
         
-        echo "Total number of rooms=", count($this->room_list), "<br>Total number of Equipment=", count($this->equip_list), '<br>';
+        echo "Total number of rooms=", count($_SESSION[$this->rooms]), "<br>Total number of Equipment=", count($_SESSION[$this->equipments]), '<br>';
     }
     
     /**
@@ -221,7 +219,7 @@ class DataHandler {
      * @return void
      */
     public function list_all_equipment() : void {
-        foreach ($this->equip_list as $equipid => $equip) {
+        foreach ($_SESSION[$this->equipments] as $equipid => $equip) {
             $equip->print();
         }
     }
@@ -231,7 +229,7 @@ class DataHandler {
      * @return void
      */
     public function list_all_rooms() : void {
-        foreach ($this->room_list as $roomid => $room) {
+        foreach ($_SESSION[$this->rooms] as $roomid => $room) {
             $room->print();
         }
     }

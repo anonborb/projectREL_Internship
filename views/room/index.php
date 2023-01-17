@@ -1,8 +1,8 @@
 
-<h2>Inventory</h2>
+<h2>Room</h2>
 <?php
 foreach (glob("*.php") as $filename) {
-    echo "<li><a href='inventory/{$filename}'>{$filename}</a></li>";
+    echo "<li><a href='room/{$filename}'>{$filename}</a></li>";
 }
 ?>
 
