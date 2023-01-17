@@ -7,17 +7,26 @@ $DB = new DataHandler;
     <head>
     </head>
     <body>
-        <form method='POST' action="all.php">
+        <form method='POST'>
             <label for="room_id">Enter new Room-ID:</label><br>
             <input type="text" id="room_id" name="room_id"><br>
-            <label for="room_cap">Room capacity:</label><br>
+            <label for="room_cap">Set room capacity:</label><br>
             <input type="text" id="room_cap" name="room_cap"><br>
             <input type="submit" value="Enter">
         </form>
 
         <?php
+        if (!empty($_POST['room_cap']) && is_numeric($_POST['room_cap'])) {
             $room = new Room($_POST['room_id'], $_POST['room_cap']);
             $DB->add_room($room);
+        } else if (!empty($_POST['room_cap'])) {
+            echo "Room capacity must be a valid integer.";
+        }
         ?>
+
+        <form action="all.php">
+            <br><input type="submit" value="View all rooms">
+        </form>
+
     </body>
 </html>
