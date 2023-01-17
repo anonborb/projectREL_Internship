@@ -30,17 +30,16 @@ class DataHandler {
     /************** Equipment Methods ****************/
     /**
      * Adds an equipment to the database. Returns false if equipment already exists.
-     * If overwrite flag is 1, the old equipment will be overwritten.
+     * If overwrite flag is set to true, the old equipment will be overwritten.
      * @param  Equipment $equip to be added
      * @param  string $room Optional room location. 
-     * @param  int $overwrite Default will not allow overwriting, if set to >0 overwriting will be allowed.
+     * @param  bool $overwrite Default will not allow overwriting, if set to true, overwriting will be allowed.
      * @return bool
      */
-    public function add_equipment(Equipment $new_equip, String $room = self::NONE, int $overwrite = 0) : bool {
+    public function add_equipment(Equipment $new_equip, String $room = self::NONE, bool $overwrite = false) : bool {
         if (!isset($new_equip)) {
             throw new InvalidArgumentException("DataHandler:add_equipment, Equipment is null");
         }
-
         $eq_label = $new_equip->get_label();
         if (isset($this->equip_list[$eq_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
             return false;
@@ -142,12 +141,24 @@ class DataHandler {
 
     /***************** Room Methods *******************/
     /**
-     * Adds the room to the room array. Returns false if cannot be added
+     * Adds the room to the room array. Returns false if room already exists.
+     * If overwrite flag is set to true, the old room will be overwritten.
      * @param  Room $room to be added
-     * @return void
+     * @param  bool $overwrite By default set to false. If set to true, will allow overwriting.
+     * @return bool
      */
-    public function add_room(Room $room) : void {
-        $_SESSION['room_list'][$room->get_label()] = $room;
+    public function add_room(Room $room, bool $overwrite = false) : bool {
+        //$_SESSION['room_list'][$room->get_label()] = $room;
+
+        if (!isset($room)) {
+            throw new InvalidArgumentException("DataHandler:add_room, Room is null");
+        }
+        $room_label = $room->get_label();
+        if (isset($this->room_list[$room_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
+            return false;
+        }
+        $this->room_list[$room_label] = $room;
+        return true;
     }
     
     /**
