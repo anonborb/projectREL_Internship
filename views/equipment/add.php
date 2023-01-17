@@ -26,6 +26,9 @@ $DB = new DataHandler;
 
             <br><input type="submit" value="Enter">
         </form>
+        <form action="inventory.php">
+            <br><input type="submit" value="View Inventory">
+        </form>
 
         <?php
         $equip_id = $_POST['equip_id'];
@@ -43,9 +46,9 @@ $DB = new DataHandler;
                 } else {
                     echo $equip_id, " already exists in inventory.";
                 }
-
+ 
             } else {    // Error messages for invalid user input
-                if (!empty($equip_id) || !empty($users)) {
+                if (!is_numeric($users) || !is_numeric($storage)) {
                     echo "<br>Enter a number for number of users and required storage space.";
                 }
                 if (empty($DB->get_room($location))) {  // inputted location does not exist
@@ -55,10 +58,6 @@ $DB = new DataHandler;
         }
         
         ?>
-        
-        <form action="inventory.php">
-            <br><input type="submit" value="View Inventory">
-        </form>
 
     </body>
 </html>
