@@ -18,28 +18,30 @@ $list = $DB->get_all_equipment();
 <h1>Show Inventory</h1>
 <h2>Number of Items: <?=count($list)?></h2>
 <pre>
-<table style="width:100%">
+<table style="width:70%">
     <tr>
             <th>Equipment ID</th>
-            <th>Required storage space</th>
-            <th>Current location</th>
+            <th>Required Storage Space</th>
+            <th>Required Users</th>
+            <th>Current Location</th>
     </tr>
 <?php
     foreach ($list as $id => $equip) {    
         echo "<tr><td>", $equip->get_label(), "</td>";
         echo "<td>", $equip->get_storage(), "</td>";
+        echo "<td>", $equip->get_num_users(), "</td>";
         echo "<td><a href='../room/equipment.php?room_id={$equip->get_location()}'>{$equip->get_location()}</a></td>";     
     }
 ?>
 </table>
 <form action="add.php">
     <input type="submit" value="Add Equipment">
-</form>
-<form action="remove.php">
+</form><form action="move.php">
+    <input type="submit" value="Move Equipment">
+</form><form action="remove.php">
     <input type="submit" value="Remove Equipment">
-</form>
-<form action="../room/all.php">
-    <input type="submit" value="All Rooms">
+</form><form action="../room/all.php">
+    <input type="submit" value="View all Rooms">
 </form>
 
 

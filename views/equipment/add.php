@@ -20,8 +20,11 @@ $DB = new DataHandler;
 
             <label for="location">Set location:</label><br>
             <input type="text" id="location" name="location" placeholder="(Optional)"><br>
+            
+            <label for="overwrite_box">Allow overwrite?</label>
+            <input type="checkbox" id="overwrite_box" name="overwrite"><br>
 
-            <input type="submit" value="Enter">
+            <br><input type="submit" value="Enter">
         </form>
 
         <?php
@@ -29,21 +32,20 @@ $DB = new DataHandler;
         $users = $_POST['users'];
         $storage = $_POST['storage'];
         $location = $_POST['location'];
+        $overwrite = $_POST['overwrite'] ? true : false;
 
         if (!(empty($equip_id) || empty($users) || empty($storage))) {
             if (is_numeric($users) && is_numeric($storage) && (empty($location) || !empty($DB->get_room($location)))) {    // checks if users and storage are integers
                 $equip = (empty($location) ? new Equipment($equip_id, $users, $storage) : new Equipment($equip_id, $users, $storage, $location));
-                if (empty($location) ? $DB->add_equipment($equip) : $DB->add_equipment($equip, $location)) {
+                
+                if (empty($location) ? $DB->add_equipment($equip, '', $overwrite) : $DB->add_equipment($equip, $location, $overwrite)) {
                     echo $equip_id, " successfully added to inventory.";
                 } else {
                     echo $equip_id, " already exists in inventory.";
                 }
-                
 
-
-                
             } else {    // Error messages for invalid user input
-                if (!(empty($equip_id) || empty($users))) {
+                if (!empty($equip_id) || !empty($users)) {
                     echo "<br>Enter a number for number of users and required storage space.";
                 }
                 if (empty($DB->get_room($location))) {  // inputted location does not exist

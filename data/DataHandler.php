@@ -150,9 +150,13 @@ class DataHandler {
             throw new InvalidArgumentException("DataHandler:add_room, Room is null");
         }
         $room_label = $room->get_label();
-        if (isset($_SESSION[$this->rooms][$room_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
-            return false;
+        if (isset($_SESSION[$this->rooms][$room_label])) {   // Checks if equipment already exists and whether to overwrite if it does
+            if (!$overwrite) {
+                return false;
+            }
+            $_SESSION[$this->rooms][$room_label]->rm_equipment_all();   // If room being overwritten contains equipment, they will be removed.
         }
+
         $_SESSION[$this->rooms][$room_label] = $room;
         return true;
     }

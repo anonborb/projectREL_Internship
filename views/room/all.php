@@ -39,11 +39,9 @@ $list = $DB->get_all_rooms();
 </table>
 <form action="add.php">
     <input type="submit" value="Add Room">
-</form>
-<form action="remove.php">
+</form><form action="remove.php">
     <input type="submit" value="Remove Room">
-</form>
-<form action="../equipment/inventory.php">
+</form><form action="../equipment/inventory.php">
     <input type="submit" value="View Inventory">
 </form>
 
