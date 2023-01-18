@@ -43,11 +43,15 @@ class DataHandler {
         if (isset($_SESSION[$this->equipments][$eq_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
             return false;
         }
-        if ($room != self::NONE) {
+        if ($room != self::NONE) {  // If user inputted a location
+            if (!isset($_SESSION[$this->rooms][$room])) {
+                throw new InvalidArgumentException('DataHandler:add_equipment, Room does not exist.');
+            }
             try {
-                $_SESSION[$this->rooms][$room]->add_equipment($new_equip);
+                $_SESSION[$this->rooms][$room]->add_equipment($new_equip);  // will throw exception if room cannot hold new equipment
             } catch (Exception $e) {
-                echo $e->getMessage(), "<br>Equipment was not added to room<br>";
+                echo "Room's capacity cannot hold new equipment. Equipment will stay in inventory.<br>";
+                $room = self::NONE; // sets location to inventory
             }
             $new_equip->set_location($room);
         }

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__.'/../../data/DataHandler.php';
+require_once '../../utility/FormHandler.php';
 $DB = new DataHandler;
-$list = $DB->get_all_rooms();
 
 ?><!DOCTYPE html>
 <html>
@@ -15,10 +15,37 @@ $list = $DB->get_all_rooms();
     </head>
 <body>
 
-<h1>Show Rooms</h1>
-<h2>Number of Rooms: <?=count($list)?></h2>
+<h1>Show All Rooms</h1>
 
-</form><table style="width:50%">
+
+<h3>Add Room</h3><form method='POST'>
+    <label for="new_room_id">Enter new Room-ID:</label><br>
+    <input type="text" id="new_room_id" name="new_room_id"><br>
+
+    <label for="room_cap">Set room capacity:</label><br>
+    <input type="text" id="room_cap" name="room_cap"><br>
+
+    <label for="overwrite_box">Allow overwrite?</label>
+    <input type="checkbox" id="overwrite_box" name="overwrite"><br>
+
+    <br><input type="submit" value="Enter">
+</form>
+<?php
+    $fHandler = new FormHandler($_POST);
+    
+    if ($fHandler->valid_addRoom()) {
+        $overwrite = $_POST['overwrite'] ? true : false;
+        $room = new Room($_POST['new_room_id'], $_POST['room_cap']);
+        echo $_POST['new_room_id'], ($DB->add_room($room, $overwrite) ? " successfully added to the database." : " already exists in the database.");
+    } else {
+        $fHandler->errors();
+    }
+    $list = $DB->get_all_rooms();
+?>
+
+
+<h2>Number of Rooms: <?=count($list)?></h2>
+</form><table style="width:100%">
     <tr>
             <th>Room</th>
             <th>Maximum Space</th>
@@ -37,7 +64,6 @@ $list = $DB->get_all_rooms();
     }
 ?>
 </table>
-
 
 <br><a href='add.php'>Add Room</a> 
 <br><a href='remove.php'>Remove Room</a> 

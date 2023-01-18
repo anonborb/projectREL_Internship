@@ -86,6 +86,11 @@ class FormHandler {
                 $this->errors[] = 'Enter a valid number for required storage space.';
             }
         }
+        if (isset($this->user_input['room_id_op'])) {
+            if (!empty($this->user_input['room_id_op']) && $this->DB->get_room($this->user_input['room_id_op']) == null) {
+                $this->errors[] = 'Room does not exist.';
+            }
+        }
         return count($this->errors) > 0 ? false : true;
     }
     
