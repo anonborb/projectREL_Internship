@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../../data/DataHandler.php';
+require_once '../../utility/FormHandler.php';
 $DB = new DataHandler;
 
 ?><!DOCTYPE html>
@@ -26,7 +27,7 @@ $DB = new DataHandler;
 
             <br><input type="submit" value="Enter">
         </form>
-        <form action="inventory.php">
+        <form action="inventory.php"> todo 
             <br><input type="submit" value="View Inventory">
         </form>
 
@@ -55,6 +56,13 @@ $DB = new DataHandler;
                     echo "<br>Inputted location does not exist.";
                 }
             }
+        }
+
+        $fhandler = new FormHandler($_POST);
+        if ($fhandler->valid()) {
+            $DB->add_equipment($equip, $location, $overwrite);
+        } else {
+            echo $fhandler->errors();
         }
         
         ?>

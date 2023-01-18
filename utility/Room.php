@@ -112,6 +112,7 @@ class Room {
 
 		$this->curr_capacity -= $eq_storage;
 		$this->equip_list[$equip_id] = $new_equip;
+		$new_equip->set_location($this->room_label); // Equipment location changes
 		return true;
 	}
 	

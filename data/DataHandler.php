@@ -130,7 +130,6 @@ class DataHandler {
             return false;       // Room does not exist
         }
         $new_room->add_equipment($equip);   // Room adds equipment
-        $equip->set_location($new_room_id); // Equipment location changes
         return true;
 
     }

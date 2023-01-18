@@ -17,7 +17,7 @@ $list = $DB->get_all_equipment();
 
 <h1>Show Inventory</h1>
 <h2>Number of Items: <?=count($list)?></h2>
-<pre>
+
 <table style="width:70%">
     <tr>
             <th>Equipment ID</th>
@@ -45,6 +45,6 @@ $list = $DB->get_all_equipment();
 </form>
 
 
-</pre>
+
 </body>
 </html>
