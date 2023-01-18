@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../../data/DataHandler.php';
+require_once '../../utility/FormHandler.php';
 $DB = new DataHandler;
 
 ?><!DOCTYPE html>
@@ -15,15 +16,18 @@ $DB = new DataHandler;
         </form>
 
         <?php
+        array_filter($DB->get_all_rooms());
         $equip_id = $_POST['equip_id'];
-        if (!empty($equip_id)) {
+        $fHandler = new FormHandler($_POST);
+
+        if (!empty($_POST) && $fHandler->valid()) {
             echo $equip_id, ($DB->rm_equipment($equip_id) ? " successfully removed." : " does not exist in the database.");
+        } else {
+            $fHandler->errors();
         }
         ?>
+        <br><a href='inventory.php'>View Inventory</a>
 
-        <form action="inventory.php">
-            <br><input type="submit" value="View Inventory">
-        </form>
 
     </body>
 </html>

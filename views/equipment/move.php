@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../../data/DataHandler.php';
+require_once '../../utility/FormHandler.php';
 $DB = new DataHandler;
 
 ?><!DOCTYPE html>
@@ -17,29 +18,21 @@ $DB = new DataHandler;
         </form>
 
         <?php
-        $equip_id = $_POST['equip_id'];
-        $room_id = $_POST['room_id'];
-        if (!(empty($equip_id) || empty($room_id))) {
-            $equip = $DB->get_equipment($equip_id);
-            if (!isset($equip)) {
-                echo $equip_id, " does not exist in the database.";
-            } else {
-                try {
-                    if ($DB->move_equipment($equip, $room_id)) {
-                        echo $equip_id, " successfully moved to ", $room_id;
-                    } else {
-                        echo $room_id, " does not exist.";
-                    }
-                } catch (Exception $e) {
-                    echo $room_id, " does not have enough space to hold new equipment.";
-                }
+        $fHandler = new FormHandler($_POST);
+        if (!empty($_POST) && $fHandler->valid()) {
+            $equip = $DB->get_equipment($_POST['equip_id']);
+            try {
+                $DB->move_equipment($equip, $_POST['room_id']);
+                echo $_POST['equip_id'], " successfully moved.";
+            } catch (Exception $e) {
+                echo $_POST['room_id'], " does not have enough space to hold new equipment.";
             }
+        } else {
+            $fHandler->errors();
         }
         ?>
-
-        <form action="inventory.php">
-            <br><input type="submit" value="View Inventory">
-        </form>
+        
+        <br><a href='inventory.php'>View Inventory</a>
 
     </body>
 </html>
