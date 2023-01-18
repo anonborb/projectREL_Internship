@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__.'/../../data/DataHandler.php';
-require_once '../../utility/FormHandler.php';
+require_once '../../utility/FormHandler.php';   
 $DB = new DataHandler;
 
 ?><!DOCTYPE html>
@@ -19,8 +19,8 @@ $DB = new DataHandler;
             <label for="storage">Enter required storage space:</label><br>
             <input type="text" id="storage" name="storage"><br>
 
-            <label for="location">Set location:</label><br>
-            <input type="text" id="location" name="location" placeholder="(Optional)"><br>
+            <label for="room_id">Set location:</label><br>
+            <input type="text" id="room_id" name="room_id" placeholder="(Optional)"><br>
             
             <label for="overwrite_box">Allow overwrite?</label>
             <input type="checkbox" id="overwrite_box" name="overwrite"><br>
@@ -35,14 +35,14 @@ $DB = new DataHandler;
         $equip_id = $_POST['equip_id'];
         $users = $_POST['users'];
         $storage = $_POST['storage'];
-        $location = $_POST['location'];
+        $room_id = $_POST['room_id'];
         $overwrite = $_POST['overwrite'] ? true : false;
 
         if (!(empty($equip_id) || empty($users) || empty($storage))) {
-            if (is_numeric($users) && is_numeric($storage) && (empty($location) || !empty($DB->get_room($location)))) {    // checks if users and storage are integers
-                $equip = (empty($location) ? new Equipment($equip_id, $users, $storage) : new Equipment($equip_id, $users, $storage, $location));
+            if (is_numeric($users) && is_numeric($storage) && (empty($room_id) || !empty($DB->get_room($room_id)))) {    // checks if users and storage are integers
+                $equip = (empty($room_id) ? new Equipment($equip_id, $users, $storage) : new Equipment($equip_id, $users, $storage, $room_id));
                 
-                if (empty($location) ? $DB->add_equipment($equip, '', $overwrite) : $DB->add_equipment($equip, $location, $overwrite)) {
+                if (empty($room_id) ? $DB->add_equipment($equip, '', $overwrite) : $DB->add_equipment($equip, $room_id, $overwrite)) {
                     echo $equip_id, " successfully added to inventory.";
                 } else {
                     echo $equip_id, " already exists in inventory.";
@@ -52,17 +52,17 @@ $DB = new DataHandler;
                 if (!is_numeric($users) || !is_numeric($storage)) {
                     echo "<br>Enter a number for number of users and required storage space.";
                 }
-                if (empty($DB->get_room($location))) {  // inputted location does not exist
-                    echo "<br>Inputted location does not exist.";
+                if (empty($DB->get_room($room_id))) {  // inputted room_id does not exist
+                    echo "<br>Inputted room_id does not exist.";
                 }
             }
         }
 
         $fhandler = new FormHandler($_POST);
         if ($fhandler->valid()) {
-            $DB->add_equipment($equip, $location, $overwrite);
+            $DB->add_equipment($equip, $room_id, $overwrite);
         } else {
-            echo $fhandler->errors();
+            $fhandler->errors();
         }
         
         ?>

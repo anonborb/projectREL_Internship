@@ -22,7 +22,7 @@ class DataHandler {
      */
     public function __construct() {
         $_SESSION[$this->rooms]  ?? $_SESSION[$this->rooms] = [self::WAREHOUSE => new Room(self::WAREHOUSE, self::MAX_SPACE)];
-        $_SESSION['equip_list'] ?? $_SESSION['equip_list'] = [];
+        $_SESSION[$this->equipments] ?? $_SESSION[$this->equipments] = [];
     }
     
     /************** Equipment Methods ****************/

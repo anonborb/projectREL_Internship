@@ -17,7 +17,6 @@ $list = $DB->get_all_rooms();
 
 <h1>Show Rooms</h1>
 <h2>Number of Items: <?=count($list)?></h2>
-<pre>
 <table style="width:100%">
     <tr>
             <th>Room</th>
@@ -36,16 +35,8 @@ $list = $DB->get_all_rooms();
         echo "<td>", $room->get_curr_occupants(), "</td></tr>";        
     }
 ?>
-</table>
-<form action="add.php">
-    <input type="submit" value="Add Room">
-</form><form action="remove.php">
-    <input type="submit" value="Remove Room">
-</form><form action="../equipment/inventory.php">
-    <input type="submit" value="View Inventory">
-</form>
+</table><br>
+<a href='add.php'>Add Room</a> <a href='remove.php'>Remove Room</a> <a href='../equipment/inventory.php'>View Inventory</a>
 
-
-</pre>
 </body>
 </html>
