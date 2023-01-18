@@ -16,7 +16,7 @@ $list = $DB->get_all_rooms();
 <body>
 
 <h1>Show Rooms</h1>
-<h2>Number of Items: <?=count($list)?></h2>
+<h2>Number of Rooms: <?=count($list)?></h2>
 <table style="width:100%">
     <tr>
             <th>Room</th>

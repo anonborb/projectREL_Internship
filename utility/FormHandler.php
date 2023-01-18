@@ -21,6 +21,9 @@ class FormHandler {
      * @return bool
      */
     public function valid() : bool {
+        if (empty($this->user_input)) {
+            return false;
+        }
         $DB = new DataHandler;
         if (isset($this->user_input['equip_id'])) { // equipment ID exists in the database
             if (empty($this->user_input['equip_id']) || ctype_space($this->user_input['equip_id'])) {

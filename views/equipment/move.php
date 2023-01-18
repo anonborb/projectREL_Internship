@@ -19,7 +19,7 @@ $DB = new DataHandler;
 
         <?php
         $fHandler = new FormHandler($_POST);
-        if (!empty($_POST) && $fHandler->valid()) {
+        if ($fHandler->valid()) {
             $equip = $DB->get_equipment($_POST['equip_id']);
             try {
                 $DB->move_equipment($equip, $_POST['room_id']);
@@ -31,7 +31,7 @@ $DB = new DataHandler;
             $fHandler->errors();
         }
         ?>
-        
+
         <br><a href='inventory.php'>View Inventory</a>
 
     </body>

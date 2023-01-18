@@ -9,9 +9,9 @@ session_start();
 
 class DataHandler {
     
-    const MAX_SPACE = 1000;
-    const WAREHOUSE = "warehouse";
-    const NONE = "";
+    protected const MAX_SPACE = 1000;
+    protected const WAREHOUSE = 'warehouse';
+    protected const NONE = "";
 
     private string $rooms = 'room_list', $equipments = 'equip_list';
 

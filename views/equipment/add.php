@@ -27,7 +27,7 @@ $DB = new DataHandler;
         <?php
 
         $fHandler = new FormHandler($_POST);
-        if (!empty($_POST) && $fHandler->valid()) {
+        if ($fHandler->valid()) {
             $overwrite = $_POST['overwrite'] ? true : false;
             $equip = new Equipment($_POST['new_equip_id'], $_POST['users'], $_POST['storage'], $_POST['room_id_op']);
             echo $_POST['new_equip_id'], ($DB->add_equipment($equip, $_POST['room_id_op'], $overwrite)) ? " successfully added." : " already exists.";
