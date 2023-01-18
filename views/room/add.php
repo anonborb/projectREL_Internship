@@ -23,21 +23,18 @@ $DB = new DataHandler;
         </form>
 
         <?php
-        $fhandler = new FormHandler($_POST);
+        $fHandler = new FormHandler($_POST);
         
-        if (!empty($_POST) && $fhandler->valid()) {
+        if (!empty($_POST) && $fHandler->valid()) {
             $overwrite = $_POST['overwrite'] ? true : false;
             $room = new Room($_POST['new_room_id'], $_POST['room_cap']);
             echo $_POST['new_room_id'], ($DB->add_room($room, $overwrite) ? " successfully added to the database." : " already exists in the database.");
         } else {
-            $fhandler->errors();
+            $fHandler->errors();
         }
 
         ?>
-        
-        <form action="all.php">
-            <br><input type="submit" value="View all rooms">
-        </form>
+        <br><a href='all.php'>View all rooms</a>
 
     </body>
 </html>

@@ -21,27 +21,24 @@ $eq_list = $DB->get_room($room_id)->get_equipment();
 Maximum Space: <?php echo $DB->get_room($room_id)->get_max_capacity()?>
 <br>Free Space: <?php echo $DB->get_room($room_id)->get_curr_capacity()?>
 
-<pre>
+
     <table style="width: 50%">
-            <tr>
-                <th>Equipment-ID</th>
-                <th>Required Users</th>
-                <th>Required Storage Space</th>
-            </tr>
+        <tr>
+            <th>Equipment-ID</th>
+            <th>Required Users</th>
+            <th>Required Storage Space</th>
+        </tr>
 
-            <?php
-            foreach ($eq_list as $id => $equip) {
-                echo "<tr><td>", $equip->get_label(), "</td>";
-                echo "<td>", $equip->get_num_users(), "</td>";
-                echo "<td>", $equip->get_storage(), "</td></tr>";
-            }
-            ?>
+        <?php
+        foreach ($eq_list as $id => $equip) {
+            echo "<tr><td>", $equip->get_label(), "</td>";
+            echo "<td>", $equip->get_num_users(), "</td>";
+            echo "<td>", $equip->get_storage(), "</td></tr>";
+        }
+        ?>
     </table>
+    <br><a href='all.php'>View Rooms</a>
+    <br><a href='../equipment/inventory.php'>View Inventory</a>
 
-    <form action="all.php">
-        <input type="submit" value="View Rooms">
-    </form><form action="../equipment/inventory.php">
-        <input type="submit" value="View Inventory">
-    </form>
 
-</pre>
+</body>

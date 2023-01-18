@@ -41,14 +41,23 @@ class FormHandler {
         }
         if (isset($this->user_input['room_id'])) {
             if (empty($this->user_input['room_id'])) {
-                $this->errors[] = 'Please enter a location';
+                $this->errors[] = 'Please enter a room';
             } else if ($DB->get_room($this->user_input['room_id']) == null) {
                 $this->errors[] = 'Room does not exist in the database.';
             }
         }
         if (isset($this->user_input['new_room_id'])) {
             if (empty($this->user_input['new_room_id'] || ctype_space($this->user_input['new_room_id']))) {
-                $this->errors[] = 'Please enter an ID for the room.';
+                $this->errors[] = 'Please enter a room-ID.';
+            } else if ($DB->get_room($this->user_input['new_room_id']) !== null) {
+                $this->errors[] = 'Room-ID already exists in the database.';
+            }
+        }
+        if (isset($this->user_input['new_equip_id'])) {
+            if (empty($this->user_input['new_equip_id'] || ctype_space($this->user_input['new_equip_id']))) {
+                $this->errors[] = 'Please enter an equipment-ID.';
+            } else if ($DB->get_room($this->user_input['new_equip_id']) !== null) {
+                $this->errors[] = 'Equipment-ID already exists in the database.';
             }
         }
         if (isset($this->user_input['room_cap'])) {

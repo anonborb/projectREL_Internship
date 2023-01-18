@@ -35,8 +35,10 @@ $list = $DB->get_all_rooms();
         echo "<td>", $room->get_curr_occupants(), "</td></tr>";        
     }
 ?>
-</table><br>
-<a href='add.php'>Add Room</a> <a href='remove.php'>Remove Room</a> <a href='../equipment/inventory.php'>View Inventory</a>
+</table>
+<br><a href='add.php'>Add Room</a> 
+<br><a href='remove.php'>Remove Room</a> 
+<br><a href='../equipment/inventory.php'>View Inventory</a>
 
 </body>
 </html>

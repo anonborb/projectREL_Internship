@@ -25,26 +25,19 @@ $list = $DB->get_all_equipment();
             <th>Required Users</th>
             <th>Current Location</th>
     </tr>
-<?php
-    foreach ($list as $id => $equip) {    
-        echo "<tr><td>", $equip->get_label(), "</td>";
-        echo "<td>", $equip->get_storage(), "</td>";
-        echo "<td>", $equip->get_num_users(), "</td>";
-        echo "<td><a href='../room/equipment.php?room_id={$equip->get_location()}'>{$equip->get_location()}</a></td>";     
-    }
-?>
+    <?php
+        foreach ($list as $id => $equip) {    
+            echo "<tr><td>", $equip->get_label(), "</td>";
+            echo "<td>", $equip->get_storage(), "</td>";
+            echo "<td>", $equip->get_num_users(), "</td>";
+            echo "<td><a href='../room/equipment.php?room_id={$equip->get_location()}'>{$equip->get_location()}</a></td>";     
+        }
+    ?>
 </table>
-<form action="add.php">
-    <input type="submit" value="Add Equipment">
-</form><form action="move.php">
-    <input type="submit" value="Move Equipment">
-</form><form action="remove.php">
-    <input type="submit" value="Remove Equipment">
-</form><form action="../room/all.php">
-    <input type="submit" value="View all Rooms">
-</form>
-
-
+<br><a href='add.php'>Add Equipment</a>
+<br><a href='move.php'>Move Equipment</a>
+<br><a href='remove.php'>Remove Equipment</a>
+<br><a href='../room/all.php'>View All Rooms</a>
 
 </body>
 </html>
