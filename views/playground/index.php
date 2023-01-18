@@ -16,18 +16,12 @@ foreach (glob("*.php") as $filename) {
 
 <?php
     session_unset();
-/*
-    if(!isset($_SESSION['testhandler'])) {
-        $_SESSION['testhandler'] = [
-            new DataHandler()
-        ];
-    }*/
+
     $_SESSION['testhandler'] = [
         new DataHandler()
     ];
 
-    //var_dump($_SESSION['testhandler'][0]);
-
+   
 
 
 

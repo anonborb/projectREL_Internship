@@ -7,6 +7,7 @@ require_once __DIR__.'/../data/DataHandler.php';
 
 class FormHandler {
     
+    private $DB;
     /**
      * Constructor, takes in an array containing user input.
      * @param  mixed $user_input 
@@ -14,22 +15,65 @@ class FormHandler {
      * @return void
      */
     public function __construct(private array $user_input, private array $errors = []) {
+        $this->DB = new DataHandler;
     }
     
     /**
-     * Checks is all user inputted variables are valid. Returns false if there are any errors.
+     * Validates new room-ID and room capacity. 
+     * Checks for if room-ID already exists and room capcity is a valid integer
      * @return bool
      */
-    public function valid() : bool {
+    public function valid_addRoom() : bool {
         if (empty($this->user_input)) {
             return false;
         }
-        $DB = new DataHandler;
-        if (isset($this->user_input['equip_id'])) { // equipment ID exists in the database
-            if (empty($this->user_input['equip_id']) || ctype_space($this->user_input['equip_id'])) {
-                $this->errors[] = 'Please enter equipment ID';
-            } else if ($DB->get_equipment($this->user_input['equip_id']) == null) {
-                $this->errors[] = 'Equipment does not exist in the database.';
+        if (isset($this->user_input['new_room_id'])) {  // new room ID doesnt already exist
+            if (empty($this->user_input['new_room_id'] || ctype_space($this->user_input['new_room_id']))) {
+                $this->errors[] = 'Please enter a room-ID.';
+            } else if ($this->DB->get_room($this->user_input['new_room_id']) !== null) {
+                $this->errors[] = 'Room-ID already exists in the database.';
+            }
+        }
+        if (isset($this->user_input['room_cap'])) { // room capacity is a valid integer
+            if (empty($this->user_input['room_cap']) || !is_numeric($this->user_input['room_cap']) || $this->user_input['room_cap'] < 0) {
+                $this->errors[] = 'Room capacity must be a valid number';
+            }
+        }
+        return count($this->errors) > 0 ? false : true;
+    }
+    
+    /**
+     * Validates room-ID exists in the database.
+     * @return bool
+     */
+    public function valid_rmRoom() : bool {
+        if (empty($this->user_input)) {
+            return false;
+        }
+        if (isset($this->user_input['room_id'])) {  // room ID exists in the database
+            if (empty($this->user_input['room_id'])) {
+                $this->errors[] = 'Please enter a room';
+            } else if ($this->DB->get_room($this->user_input['room_id']) == null) {
+                $this->errors[] = 'Room does not exist in the database.';
+            }
+        }
+        return count($this->errors) > 0 ? false : true;
+    }
+    
+    /**
+     * Validates new equipment-ID, number of users, and storage space.
+     * Checks if equipment-ID already exists and if users and storage are valid integers.
+     * @return bool
+     */
+    public function valid_addEquip() : bool {
+        if (empty($this->user_input)) {
+            return false;
+        }
+        if (isset($this->user_input['new_equip_id'])) { // new equipment ID doesnt already exist
+            if (empty($this->user_input['new_equip_id'] || ctype_space($this->user_input['new_equip_id']))) {
+                $this->errors[] = 'Please enter an equipment-ID.';
+            } else if ($this->DB->get_room($this->user_input['new_equip_id']) !== null) {
+                $this->errors[] = 'Equipment-ID already exists in the database.';
             }
         }
         if (isset($this->user_input['users'])) {    // number of users is a valid integer
@@ -42,35 +86,53 @@ class FormHandler {
                 $this->errors[] = 'Enter a valid number for required storage space.';
             }
         }
+        return count($this->errors) > 0 ? false : true;
+    }
+    
+    /**
+     * Checks if equipment-ID exists in the database.
+     * @return bool
+     */
+    public function valid_rmEquip() : bool {
+        if (empty($this->user_input)) {
+            return false;
+        }
+        if (isset($this->user_input['equip_id'])) { // equipment ID exists in the database
+            if (empty($this->user_input['equip_id']) || ctype_space($this->user_input['equip_id'])) {
+                $this->errors[] = 'Please enter equipment ID';
+            } else if ($this->DB->get_equipment($this->user_input['equip_id']) == null) {
+                $this->errors[] = 'Equipment does not exist in the database.';
+            }
+        }
+        return count($this->errors) > 0 ? false : true;
+    }
+    
+    /**
+     * Checks if room-ID and equipment-ID exist in the database. 
+     * @return bool
+     */
+    public function valid_mvEquip() : bool {
+        if (empty($this->user_input)) {
+            return false;
+        }
+        if (isset($this->user_input['equip_id'])) { // equipment ID exists in the database
+            if (empty($this->user_input['equip_id']) || ctype_space($this->user_input['equip_id'])) {
+                $this->errors[] = 'Please enter equipment ID';
+            } else if ($this->DB->get_equipment($this->user_input['equip_id']) == null) {
+                $this->errors[] = 'Equipment does not exist in the database.';
+            }
+        }
         if (isset($this->user_input['room_id'])) {  // room ID exists in the database
             if (empty($this->user_input['room_id'])) {
                 $this->errors[] = 'Please enter a room';
-            } else if ($DB->get_room($this->user_input['room_id']) == null) {
+            } else if ($this->DB->get_room($this->user_input['room_id']) == null) {
                 $this->errors[] = 'Room does not exist in the database.';
             }
         }
-        if (isset($this->user_input['new_room_id'])) {  // new room ID doesnt already exist
-            if (empty($this->user_input['new_room_id'] || ctype_space($this->user_input['new_room_id']))) {
-                $this->errors[] = 'Please enter a room-ID.';
-            } else if ($DB->get_room($this->user_input['new_room_id']) !== null) {
-                $this->errors[] = 'Room-ID already exists in the database.';
-            }
-        }
-        if (isset($this->user_input['new_equip_id'])) { // new equipment ID doesnt already exist
-            if (empty($this->user_input['new_equip_id'] || ctype_space($this->user_input['new_equip_id']))) {
-                $this->errors[] = 'Please enter an equipment-ID.';
-            } else if ($DB->get_room($this->user_input['new_equip_id']) !== null) {
-                $this->errors[] = 'Equipment-ID already exists in the database.';
-            }
-        }
-        if (isset($this->user_input['room_cap'])) { // room capacity is a valid integer
-            if (empty($this->user_input['room_cap']) || !is_numeric($this->user_input['room_cap']) || $this->user_input['room_cap'] < 0) {
-                $this->errors[] = 'Room capacity must be a valid number';
-            }
-        }
-
-        return count($this->errors) > 0 ? false : true; // returns true if there are no error messages
+        return count($this->errors) > 0 ? false : true;
     }
+
+
     
     /**
      * Prints out all errors with user inputs.

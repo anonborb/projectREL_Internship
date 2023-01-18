@@ -18,7 +18,7 @@ $DB = new DataHandler;
         <?php
         $fHandler = new FormHandler($_POST);
 
-        if ($fHandler->valid()) {
+        if ($fHandler->valid_rmRoom()) {
             $equip_id = $_POST['equip_id'];
             echo $equip_id, ($DB->rm_equipment($equip_id) ? " successfully removed." : " does not exist in the database.");
         } else {

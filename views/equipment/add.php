@@ -27,15 +27,15 @@ $DB = new DataHandler;
         <?php
 
         $fHandler = new FormHandler($_POST);
-        if ($fHandler->valid()) {
+        if ($fHandler->valid_addEquip()) {
             $overwrite = $_POST['overwrite'] ? true : false;
             $equip = new Equipment($_POST['new_equip_id'], $_POST['users'], $_POST['storage'], $_POST['room_id_op']);
-            echo $_POST['new_equip_id'], ($DB->add_equipment($equip, $_POST['room_id_op'], $overwrite)) ? " successfully added." : " already exists.";
+            //echo $_POST['new_equip_id'], ($DB->add_equipment($equip, $_POST['room_id_op'], $overwrite)) ? " successfully added." : " already exists.";
         } else {
             $fHandler->errors();
         }
         
-        ?>
+        ?> todo: room DNE
         <br><a href='inventory.php'>View Inventory</a>
     </body>
     

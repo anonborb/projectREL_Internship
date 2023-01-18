@@ -17,7 +17,8 @@ $list = $DB->get_all_rooms();
 
 <h1>Show Rooms</h1>
 <h2>Number of Rooms: <?=count($list)?></h2>
-<table style="width:100%">
+
+</form><table style="width:50%">
     <tr>
             <th>Room</th>
             <th>Maximum Space</th>
@@ -36,6 +37,8 @@ $list = $DB->get_all_rooms();
     }
 ?>
 </table>
+
+
 <br><a href='add.php'>Add Room</a> 
 <br><a href='remove.php'>Remove Room</a> 
 <br><a href='../equipment/inventory.php'>View Inventory</a>
