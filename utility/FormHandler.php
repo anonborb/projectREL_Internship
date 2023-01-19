@@ -1,7 +1,7 @@
 <?php
-//=======================================
+//-----------------------------------------
 // Class definition for a Form Validator
-//=======================================
+//-----------------------------------------
 
 require_once __DIR__.'/../data/EquipmentHandler.php';
 require_once __DIR__.'/../data/RoomHandler.php';
@@ -17,7 +17,7 @@ class FormHandler {
      * @param  mixed $errors Error log
      * @return void
      */
-    public function __construct(private array $user_input, private array $errors = []) {
+    public function __construct(private array $user_input = [], private array $errors = []) {
         $this->EHandler = new EquipmentHandler;
         $this->RHandler = new RoomHandler;
     }
@@ -31,10 +31,11 @@ class FormHandler {
         if (empty($this->user_input)) {
             return false;
         }
-        if (isset($this->user_input['new_room_id'])) {  // new room ID doesnt already exist
-            if (empty($this->user_input['new_room_id'] || ctype_space($this->user_input['new_room_id']))) {
+        $overwrite = $_POST['overwrite'] ? true : false;
+        if (isset($this->user_input['room_id'])) {  // new room ID doesnt already exist
+            if (empty($this->user_input['room_id'] || ctype_space($this->user_input['room_id']))) {
                 $this->errors[] = 'Please enter a room-ID.';
-            } else if ($this->RHandler->get($this->user_input['new_room_id']) !== null) {
+            } else if ($this->room_exists() && !$overwrite) {
                 $this->errors[] = 'Room-ID already exists in the database.';
             }
         }
@@ -67,10 +68,11 @@ class FormHandler {
         if (empty($this->user_input)) {
             return false;
         }
-        if (isset($this->user_input['new_equip_id'])) { // new equipment ID doesnt already exist
-            if (empty($this->user_input['new_equip_id'] || ctype_space($this->user_input['new_equip_id']))) {
+        $overwrite = $_POST['overwrite'] ? true : false;
+        if (isset($this->user_input['equip_id'])) { // new equipment ID doesnt already exist
+            if (empty($this->user_input['equip_id'] || ctype_space($this->user_input['equip_id']))) {
                 $this->errors[] = 'Please enter an equipment-ID.';
-            } else if ($this->EHandler->get($this->user_input['new_equip_id']) !== null) {
+            } else if ($this->equipment_exists() && !$overwrite) {
                 $this->errors[] = 'Equipment-ID already exists in the database.';
             }
         }
@@ -112,9 +114,20 @@ class FormHandler {
         if (empty($this->user_input)) {
             return false;
         }
-        $this->equipment_exists();
-        $this->room_exists();
-
+        if (isset($this->user_input['room_id'])) {  // validate that room ID exists in the database
+            if (empty($this->user_input['room_id'])) {
+                $this->errors[] = 'Please enter a room';
+            } else if (!$this->room_exists()) {
+                $this->errors[] = 'Room does not exist in the database.';
+            }
+        }
+        if (isset($this->user_input['equip_id'])) { // equipment ID exists in the database
+            if (empty($this->user_input['equip_id']) || ctype_space($this->user_input['equip_id'])) {
+                $this->errors[] = 'Please enter equipment ID';
+            } else if (!$this->equipment_exists()) {
+                $this->errors[] = 'Equipment does not exist in the database.';
+            } 
+        }
         return count($this->errors) > 0 ? false : true;
     }
 
@@ -123,16 +136,7 @@ class FormHandler {
      * @return bool
      */
     public function room_exists() : bool {
-        if (isset($this->user_input['room_id'])) {  // validate that room ID exists in the database
-            if (empty($this->user_input['room_id'])) {
-                $this->errors[] = 'Please enter a room';
-            } else if ($this->RHandler->get($this->user_input['room_id']) == null) {
-                $this->errors[] = 'Room does not exist in the database.';
-            } else {
-                return true;
-            }
-        }
-        return false;
+        return $this->RHandler->get($this->user_input['room_id']) != null;
     }
 
     /**
@@ -140,16 +144,7 @@ class FormHandler {
      * @return bool
      */
     public function equipment_exists() : bool {
-        if (isset($this->user_input['equip_id'])) { // equipment ID exists in the database
-            if (empty($this->user_input['equip_id']) || ctype_space($this->user_input['equip_id'])) {
-                $this->errors[] = 'Please enter equipment ID';
-            } else if ($this->EHandler->get($this->user_input['equip_id']) == null) {
-                $this->errors[] = 'Equipment does not exist in the database.';
-            } else {
-                return true;
-            }
-        }
-        return false;
+        return $this->EHandler->get($this->user_input['equip_id']) != null;
     }
 
 

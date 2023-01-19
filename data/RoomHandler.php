@@ -1,5 +1,10 @@
 <?php
+
 require_once 'DataHandler.php';
+
+//----------------------------------------------------------------------
+// Definition for a Handler that handles all the rooms in the database
+//----------------------------------------------------------------------
 
 class RoomHandler extends DataHandler {
 
@@ -10,20 +15,16 @@ class RoomHandler extends DataHandler {
      * @param  bool $overwrite By default set to false. If set to true, will allow overwriting.
      * @return bool
      */
-    public function add(Object $room, bool $overwrite = false) : bool {
-        if (!isset($room)) {
-            throw new InvalidArgumentException("DataHandler:add_room, Room is null");
+    public function add(Object $room) {
+        if (get_class($room) != 'Room') {
+            throw new InvalidArgumentException("DataHandler:add_room, Object must be a Room.");
         }
         $room_label = $room->get_label();
-        if (isset($_SESSION[self::ROOMS][$room_label])) {   // Checks if equipment already exists and whether to overwrite if it does
-            if (!$overwrite) {
-                return false;
-            }
-            $_SESSION[self::ROOMS][$room_label]->rm_equipment_all();   // If room being overwritten contains equipment, they will be removed.
+        if (isset($_SESSION[self::ROOMS][$room_label])) {  // checks if room already exists. If it does, all equipment will be removed before overwritting.
+            $_SESSION[self::ROOMS][$room_label]->rm_equipment_all();  
         }
 
         $_SESSION[self::ROOMS][$room_label] = $room;
-        return true;
     }
     
     /**
@@ -32,14 +33,10 @@ class RoomHandler extends DataHandler {
      * @param  mixed $room_id
      * @return bool
      */
-    public function remove(string $room_id) : bool { 
+    public function remove(string $room_id) { 
         $room = $_SESSION[self::ROOMS][$room_id];
-        if (!isset($room)) {
-            return false;
-        }
         $room->rm_equipment_all();
         unset($_SESSION[self::ROOMS][$room_id]);
-        return true;
     }
 
     /**

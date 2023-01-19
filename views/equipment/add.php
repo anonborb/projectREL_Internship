@@ -10,8 +10,8 @@ $DB = new EquipmentHandler;
     <body>
         <h1>Add Equipment</h1>
         <form method='POST'>
-            <label for="new_equip_id">Enter new Equipment-ID:</label><br />
-            <input type="text" id="new_equip_id" name="new_equip_id" /><br />
+            <label for="equip_id">Enter new Equipment-ID:</label><br />
+            <input type="text" id="equip_id" name="equip_id" /><br />
             <label for="users">Enter number of users required:</label><br />
             <input type="text" id="users" name="users" /><br />
             <label for="storage">Enter required storage space:</label><br />
@@ -28,11 +28,10 @@ $DB = new EquipmentHandler;
 
         $fHandler = new FormHandler($_POST);
         if ($fHandler->valid_addEquip()) {
-            $equip = new Equipment($_POST['new_equip_id'], $_POST['users'], $_POST['storage'], $_POST['room_optional']);
-            $overwrite = $_POST['overwrite'] ? true : false;
-            $eq_added = $DB->add($equip, $_POST['room_optional'], $overwrite);
+            $equip = new Equipment($_POST['equip_id'], $_POST['users'], $_POST['storage'], $_POST['room_optional']);
+            $DB->add($equip, $_POST['room_optional']);
 
-            echo $_POST['new_equip_id'], $eq_added ? " successfully added." : " already exists.";
+            echo $_POST['equip_id'], " successfully added.";
         } else {
             $fHandler->errors();
         }

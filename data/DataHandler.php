@@ -2,7 +2,6 @@
 
 require_once 'database_objects/Equipment.php';
 require_once 'database_objects/Room.php';
-
 session_start();
 
 abstract class DataHandler {
@@ -21,12 +20,11 @@ abstract class DataHandler {
     public function __construct() {
         $_SESSION[self::ROOMS]  ?? $_SESSION[self::ROOMS] = [self::WAREHOUSE => new Room(self::WAREHOUSE, self::MAX_SPACE)];
         $_SESSION[self::EQUIPMENT] ?? $_SESSION[self::EQUIPMENT] = [];
-        
     }
 
-    abstract public function add(Object $data, bool $overwrite = false) : bool;
+    abstract public function add(Object $data);
 
-    abstract public function remove(string $id) : bool;
+    abstract public function remove(string $id);
 
     abstract public function get(string $id) : Object|null;
 

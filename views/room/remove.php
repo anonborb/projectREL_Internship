@@ -20,7 +20,8 @@ $DB = new RoomHandler;
         $fHandler = new FormHandler($_POST);
 
         if ($fHandler->valid_rmRoom()) {
-            echo $_POST['room_id'], ($DB->remove($_POST['room_id'])) ? " successfully removed." : " does not exist in the database.";
+            $DB->remove($_POST['room_id']);
+            echo $_POST['room_id'], " successfully removed.";
         } else {
             $fHandler->errors();
         }

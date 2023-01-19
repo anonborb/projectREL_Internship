@@ -1,65 +1,56 @@
 <?php
+
 require_once 'DataHandler.php';
+
+//--------------------------------------------------------------------------
+// Definition for a Handler that handles all the equipment in the database
+//--------------------------------------------------------------------------
 
 class EquipmentHandler extends DataHandler {
     
     /**
-     * Adds an equipment to the database. Returns false if equipment already exists.
+     * Adds an equipment to the database. Returns false if equipment already exists and overwrite is not allowed
      * If overwrite flag is set to true, the old equipment will be overwritten.
      * @param  Equipment $equip to be added
-     * @param  string $room Optional room location. 
-     * @param  bool $overwrite Default will not allow overwriting, if set to true, overwriting will be allowed.
+     * @param  string $location Optional location. 
      * @return bool
      */
-    public function add(Object $new_equip, bool $overwrite = false, String $room = self::NONE) : bool {
-        if (!isset($new_equip)) {
-            throw new InvalidArgumentException("DataHandler:add_equipment, Equipment is null");
+    public function add(Object $new_equip, string $location = self::NONE) : bool {
+        if (get_class($new_equip) != 'Equipment') {
+            throw new InvalidArgumentException("DataHandler:add_equipment, Object must be an Equipment.");
         }
-        $eq_label = $new_equip->get_label();
-        if (isset($_SESSION[self::EQUIPMENT][$eq_label]) && !$overwrite) {   // Checks if equipment already exists and whether to overwrite if it does
-            return false;
-        }
-        if ($room != self::NONE) {  // If user inputted a location
-            if (!isset($_SESSION[self::ROOMS][$room])) {
-                throw new InvalidArgumentException('DataHandler:add_equipment, Room does not exist.');
-            }
+        $equip_id = $new_equip->get_label();
+
+        if ($location != self::NONE) {  // If user inputted a location, sets and adds equipment to location
             try {
-                $_SESSION[self::ROOMS][$room]->add_equipment($new_equip);  // will throw exception if room cannot hold new equipment
+                $_SESSION[self::ROOMS][$location]->add_equipment($new_equip);  // will throw exception if room cannot hold new equipment
             } catch (Exception $e) {
                 echo "Room's capacity cannot hold new equipment. Equipment will stay in inventory.<br>";
-                $room = self::NONE; // sets location to inventory
+                $location = self::NONE; // sets location to inventory
             }
-            $new_equip->set_location($room);
+            $new_equip->set_location($location);
         }
-        $_SESSION[self::EQUIPMENT][$eq_label] = $new_equip;
+        if ($_SESSION[self::EQUIPMENT][$equip_id] != null) {    // if equipment already exists, remove from location before overwriting.
+            $this->remove($equip_id);
+        }
+        $_SESSION[self::EQUIPMENT][$equip_id] = $new_equip;
         return true;
     }
 
     /**
      * Removes specified equipment from the database. Will remove from current room location.
-     * Returns false if Equipment does not exist in the database.
      * @param  string $equip_id
-     * @return bool
      */
-    public function remove(string $equip_id) : bool {
+    public function remove(string $equip_id){
         $equip = $_SESSION[self::EQUIPMENT][$equip_id];
 
-        if (isset($equip)) {
-            $room_location = $equip->get_location();
-            if ($room_location != self::NONE) {     // Removing from current room location
-                try {
-                    $_SESSION[self::ROOMS][$room_location]->rm_equipment($equip);
-                } catch (Exception $e) {    // On the off chance that Room does not exist in database 
-                    echo $e->getMessage();
-                    echo "<br>Room does not exist.";
-                }
-            }
+        $room_location = $equip->get_location();
+
+        if ($room_location != self::NONE) {     // Removing from current room location
+            $_SESSION[self::ROOMS][$room_location]->rm_equipment($equip);
             
-            unset($_SESSION[self::EQUIPMENT][$equip_id]);    // Removing from inventory
-            return true;
-        } else {
-            return false;
         }
+        unset($_SESSION[self::EQUIPMENT][$equip_id]);    // Removing from inventory
     }
 
     /**
@@ -90,29 +81,16 @@ class EquipmentHandler extends DataHandler {
     /**
      * Moves equipment between rooms. 
      * Removes from current room, adds to new room, sets equipment location to new location
-     * Returns false if new Room location does not exist.
-     * @param  mixed $equip_id
-     * @param  mixed $room_id
-     * @throws InvalidArgumentException
-     * @return bool
+     * @param  Equipment $equip
+     * @param  string $new_room_id
      */
-    public function move_equipment(Equipment $equip, string $new_room_id) : bool {     // yet to be implemented
-        if (!isset($equip)) {   
-            throw new InvalidArgumentException("DataHandler:move_equipment, equipment is null");
-        }
-
-        $old_location = $equip->get_location();
+    public function move_equipment(Equipment $equip, string $new_room_id) {    
+        $old_location = $equip->get_location(); 
         if ($old_location != self::NONE) {  // Removes equipment from old location
             $_SESSION[self::ROOMS][$old_location]->rm_equipment($equip);
         }
-
         $new_room = $_SESSION[self::ROOMS][$new_room_id];
-        if (!isset($new_room)) {    
-            return false;       // Room does not exist
-        }
-        $new_room->add_equipment($equip);   // Room adds equipment
-        return true;
-
+        $new_room->add_equipment($equip);   // Room adds equipment. throws exception if room cannot hold more equipment.
     }
     
 }

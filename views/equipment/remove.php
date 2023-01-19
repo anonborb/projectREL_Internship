@@ -18,9 +18,10 @@ $DB = new EquipmentHandler;
         <?php
         $fHandler = new FormHandler($_POST);
 
-        if ($fHandler->valid_rmRoom()) {
+        if ($fHandler->valid_rmEquip()) {
             $equip_id = $_POST['equip_id'];
-            echo $equip_id, ($DB->remove($equip_id) ? " successfully removed." : " does not exist in the database.");
+            $DB->remove($equip_id);
+            echo $equip_id, ' successfully removed.';
         } else {
             $fHandler->errors();
         }
