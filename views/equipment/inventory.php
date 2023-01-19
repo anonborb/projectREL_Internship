@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__.'/../../data/DataHandler.php';
-$DB = new DataHandler;
-$list = $DB->get_all_equipment();
+require_once __DIR__.'/../../data/EquipmentHandler.php';
+$DB = new EquipmentHandler;
+$list = $DB->get_list();
 
 ?><!DOCTYPE html>
 <html>

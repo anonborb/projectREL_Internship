@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__.'/../../data/DataHandler.php';
+require_once __DIR__.'/../../data/EquipmentHandler.php';
 require_once '../../utility/FormHandler.php';
-$DB = new DataHandler;
+$DB = new EquipmentHandler;
 
 ?><!DOCTYPE html>
 <html>
@@ -20,7 +20,7 @@ $DB = new DataHandler;
 
         if ($fHandler->valid_rmRoom()) {
             $equip_id = $_POST['equip_id'];
-            echo $equip_id, ($DB->rm_equipment($equip_id) ? " successfully removed." : " does not exist in the database.");
+            echo $equip_id, ($DB->remove($equip_id) ? " successfully removed." : " does not exist in the database.");
         } else {
             $fHandler->errors();
         }

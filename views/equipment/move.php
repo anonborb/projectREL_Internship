@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__.'/../../data/DataHandler.php';
+require_once __DIR__.'/../../data/EquipmentHandler.php';
 require_once '../../utility/FormHandler.php';
-$DB = new DataHandler;
+$DB = new EquipmentHandler;
 
 ?><!DOCTYPE html>
 <html>
@@ -20,7 +20,7 @@ $DB = new DataHandler;
         <?php
         $fHandler = new FormHandler($_POST);
         if ($fHandler->valid_mvEquip()) {
-            $equip = $DB->get_equipment($_POST['equip_id']);
+            $equip = $DB->get($_POST['equip_id']);
             try {
                 $DB->move_equipment($equip, $_POST['room_id']);
                 echo $_POST['equip_id'], " successfully moved.";

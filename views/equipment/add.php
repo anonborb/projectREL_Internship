@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__.'/../../data/DataHandler.php';
+require_once __DIR__.'/../../data/EquipmentHandler.php';
 require_once '../../utility/FormHandler.php';   
-$DB = new DataHandler;
+$DB = new EquipmentHandler;
 
 ?><!DOCTYPE html>
 <html>
@@ -30,7 +30,7 @@ $DB = new DataHandler;
         if ($fHandler->valid_addEquip()) {
             $equip = new Equipment($_POST['new_equip_id'], $_POST['users'], $_POST['storage'], $_POST['room_optional']);
             $overwrite = $_POST['overwrite'] ? true : false;
-            $eq_added = $DB->add_equipment($equip, $_POST['room_optional'], $overwrite);
+            $eq_added = $DB->add($equip, $_POST['room_optional'], $overwrite);
 
             echo $_POST['new_equip_id'], $eq_added ? " successfully added." : " already exists.";
         } else {

@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__.'/../../data/DataHandler.php';
+require_once __DIR__.'/../../data/RoomHandler.php';
 require_once '../../utility/FormHandler.php';
-$DB = new DataHandler;
+$DB = new RoomHandler;
 
 ?><!DOCTYPE html>
 <html>
@@ -20,7 +20,7 @@ $DB = new DataHandler;
         $fHandler = new FormHandler($_POST);
 
         if ($fHandler->valid_rmRoom()) {
-            echo $_POST['room_id'], ($DB->rm_room($_POST['room_id'])) ? " successfully removed." : " does not exist in the database.";
+            echo $_POST['room_id'], ($DB->remove($_POST['room_id'])) ? " successfully removed." : " does not exist in the database.";
         } else {
             $fHandler->errors();
         }

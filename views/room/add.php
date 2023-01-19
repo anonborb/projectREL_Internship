@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__.'/../../data/DataHandler.php';
+require_once __DIR__.'/../../data/RoomHandler.php';
 require_once '../../utility/FormHandler.php';
-$DB = new DataHandler;
+$DB = new RoomHandler;
 
 ?><!DOCTYPE html>
 <html>
@@ -28,7 +28,7 @@ $DB = new DataHandler;
         if ($fHandler->valid_addRoom()) {
             $overwrite = $_POST['overwrite'] ? true : false;
             $room = new Room($_POST['new_room_id'], $_POST['room_cap']);
-            echo $_POST['new_room_id'], ($DB->add_room($room, $overwrite) ? " successfully added to the database." : " already exists in the database.");
+            echo $_POST['new_room_id'], ($DB->add($room, $overwrite) ? " successfully added to the database." : " already exists in the database.");
         } else {
             $fHandler->errors();
         }
