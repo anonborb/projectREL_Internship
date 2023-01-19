@@ -11,6 +11,7 @@ $DB = new DataHandler;
                 border: 1px solid black;
                 border-collapse: collapse;
             }
+            
         </style>
     </head>
 <body>
@@ -30,6 +31,8 @@ $DB = new DataHandler;
 
     <br><input type="submit" value="Enter">
 </form>
+
+
 <?php
     $fHandler = new FormHandler($_POST);
     

@@ -7,7 +7,7 @@ require_once __DIR__.'/../data/DataHandler.php';
 
 class FormHandler {
     
-    private $DB;
+    private DataHandler $DB;
     /**
      * Constructor, takes in an array containing user input.
      * @param  mixed $user_input 
@@ -50,13 +50,7 @@ class FormHandler {
         if (empty($this->user_input)) {
             return false;
         }
-        if (isset($this->user_input['room_id'])) {  // room ID exists in the database
-            if (empty($this->user_input['room_id'])) {
-                $this->errors[] = 'Please enter a room';
-            } else if ($this->DB->get_room($this->user_input['room_id']) == null) {
-                $this->errors[] = 'Room does not exist in the database.';
-            }
-        }
+        $this->room_exists();
         return count($this->errors) > 0 ? false : true;
     }
     
@@ -102,13 +96,7 @@ class FormHandler {
         if (empty($this->user_input)) {
             return false;
         }
-        if (isset($this->user_input['equip_id'])) { // equipment ID exists in the database
-            if (empty($this->user_input['equip_id']) || ctype_space($this->user_input['equip_id'])) {
-                $this->errors[] = 'Please enter equipment ID';
-            } else if ($this->DB->get_equipment($this->user_input['equip_id']) == null) {
-                $this->errors[] = 'Equipment does not exist in the database.';
-            }
-        }
+        $this->equipment_exists();
         return count($this->errors) > 0 ? false : true;
     }
     
@@ -120,21 +108,44 @@ class FormHandler {
         if (empty($this->user_input)) {
             return false;
         }
+        $this->equipment_exists();
+        $this->room_exists();
+
+        return count($this->errors) > 0 ? false : true;
+    }
+
+    /**
+     * Verifies that inputted room exists.
+     * @return bool
+     */
+    public function room_exists() : bool {
+        if (isset($this->user_input['room_id'])) {  // validate that room ID exists in the database
+            if (empty($this->user_input['room_id'])) {
+                $this->errors[] = 'Please enter a room';
+            } else if ($this->DB->get_room($this->user_input['room_id']) == null) {
+                $this->errors[] = 'Room does not exist in the database.';
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Verifies that inputted equipment exists.
+     * @return bool
+     */
+    public function equipment_exists() : bool {
         if (isset($this->user_input['equip_id'])) { // equipment ID exists in the database
             if (empty($this->user_input['equip_id']) || ctype_space($this->user_input['equip_id'])) {
                 $this->errors[] = 'Please enter equipment ID';
             } else if ($this->DB->get_equipment($this->user_input['equip_id']) == null) {
                 $this->errors[] = 'Equipment does not exist in the database.';
+            } else {
+                return true;
             }
         }
-        if (isset($this->user_input['room_id'])) {  // room ID exists in the database
-            if (empty($this->user_input['room_id'])) {
-                $this->errors[] = 'Please enter a room';
-            } else if ($this->DB->get_room($this->user_input['room_id']) == null) {
-                $this->errors[] = 'Room does not exist in the database.';
-            }
-        }
-        return count($this->errors) > 0 ? false : true;
+        return false;
     }
 
 

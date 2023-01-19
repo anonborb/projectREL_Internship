@@ -19,7 +19,7 @@ $DB = new DataHandler;
 
         <?php
         $fHandler = new FormHandler($_POST);
-        if ($fHandler->valid()) {
+        if ($fHandler->valid_mvEquip()) {
             $equip = $DB->get_equipment($_POST['equip_id']);
             try {
                 $DB->move_equipment($equip, $_POST['room_id']);

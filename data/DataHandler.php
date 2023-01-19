@@ -2,8 +2,8 @@
 //==================================
 // Class Definition of DataHandler
 //==================================
-require_once __DIR__.'/../utility/Equipment.php';
-require_once __DIR__.'/../utility/Room.php';
+require_once 'Equipment.php';
+require_once 'Room.php';
 session_start();
 
 
